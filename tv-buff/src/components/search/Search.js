@@ -4,7 +4,8 @@ const Search = props => {
     return(
         <form>
             <input placeholder="Search"
-            style={styles.input} />
+            style={styles.input} 
+            onChange={props.search}/>
         </form>
     )
 }

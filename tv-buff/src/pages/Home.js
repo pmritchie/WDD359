@@ -15,10 +15,9 @@ search = e => {
   this.setState({search: e.target.value})
   console.log(this.search)
 }
+//fetch data twice, once for shows the other for actors
 componentDidMount() {
   Promise.all([
-  //http://api.tvmaze.com/singlesearch/shows?q=cops
-  //http://api.tvmaze.com/search/people?q=lauren
   fetch("http://api.tvmaze.com/search/people?q=lauren",{method: 'get'}),
   fetch("http://api.tvmaze.com/search/shows?q=girls",{method: 'get'})
 ])
@@ -28,8 +27,15 @@ componentDidMount() {
         actors: data1,
         shows: data2,
         isLoaded: true,
-        
-      })});
+      })
+    },
+    (err) => {
+      this.setState({
+        isLoaded: true,
+        err
+      });
+    }
+    );
 }
 
 render() {
