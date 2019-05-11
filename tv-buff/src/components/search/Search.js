@@ -13,11 +13,10 @@ export default Search;
 
 const styles= {
     input: {
-      margin: '0 1em',
+      margin: '1rem',
       borderRadius: '20px',
-      border: 'none',
+      border: 'solid black 1px',
       textIndent: '5%',
-      height: '30%'
+      height: '2rem'
     },
-   
 }  
