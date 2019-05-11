@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 //import Search from '../components/search/Search.js';
 
-class Pg1 extends Component{
+class Home extends Component{
   state = {
     err: null,
     isLoaded: false,
@@ -10,7 +10,9 @@ class Pg1 extends Component{
   };
 
 componentDidMount() {
-  fetch("http://api.tvmaze.com/search/shows?q=cops")
+  //http://api.tvmaze.com/singlesearch/shows?q=cops
+  //http://api.tvmaze.com/search/people?q=lauren
+  fetch("http://api.tvmaze.com/search/people?q=lauren")
     .then(res => res.json())
     .then(
       (res) => {
@@ -36,13 +38,15 @@ render() {
     return <div>Error: {err.message}</div>;
   } else if (!isLoaded) {
     return <div>Loading...</div>;
-  } else {
+  } else { 
+    console.log(items)
     return (
       <div>
+    
         {items.map(item => (
           
-          <li key={item.show.id}>
-            {item.show.name} l {item.show.rating.average}
+          <li key={item.person.id}>
+            {item.person.name} 
           </li>
         ))}
       </div>
@@ -51,5 +55,5 @@ render() {
 }
 }
 
-export default Pg1;
+export default Home;
 
