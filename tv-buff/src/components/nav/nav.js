@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 const Nav = props => {
     return(
         <nav style={styles.container}>
-            <NavLink to="/Pg1" style={styles.btn}>Home</NavLink>
+            <NavLink to="/Home" style={styles.btn}>Home</NavLink>
             <NavLink to="/Favorites" style={styles.btn}>Favorites</NavLink>
             <NavLink to="/Description" style={styles.btn}>Description</NavLink>
         </nav>
@@ -15,15 +15,15 @@ export default Nav;
 
 const styles = {
     container: {
+      display: 'flex',
       flexDirection: 'row',
-      color: 'white', 
-      justifyContent: 'space-between',
-      margin: '1rem',
+      color: 'black', 
+      justifyContent: 'space-around',
       alignItems: 'center'
     },
     btn: {
       margin :'.5rem',
-      backgroundColor:'transparent',
+      backgroundColor:'blue',
       color: 'white',
       fontFamily: " 'Indie Flower', cursive",
       fontSize: '1.5rem',
