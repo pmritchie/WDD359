@@ -1,16 +1,24 @@
-import React from 'react';
+import React, {Component}from 'react';
 import MyBtn from '../button/button'
 
-const Search = props => {
-    return(
-        <form onSubmit={props.search}>
-            <input placeholder="Tom Cruise.."
-            name = 'search'
-            style={styles.input} 
-            onChange={props.search}/>   
-            <MyBtn style={styles.btn} btnText="Search" />
-        </form>
-    )
+
+class Search extends Component{
+ state ={
+     searchQuery: ''
+ }
+ //props = {} 
+
+ render(){
+     return (<form onSubmit={(e)=>this.props.search(e,this.state.searchQuery)}>
+                 <input placeholder="Tom Cruise.."
+                 onChange={(e)=>{this.setState({searchQuery: e.target.value})}}
+                 name = 'search'
+                 style={styles.input} 
+                 />   
+                 <MyBtn style={styles.btn} btnText="Search" type={"submit"} />
+             </form>
+             )
+ }
 }
 
 export default Search;
