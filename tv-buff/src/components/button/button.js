@@ -4,7 +4,7 @@ import React from 'react'
 //Dummy Component
 const MyBtn = props => {  
   return (
-    <button style={props.style} >
+    <button style={props.style} type={props.submit}>
      {props.btnText}
     </button>
   )

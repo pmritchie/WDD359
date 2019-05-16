@@ -32,6 +32,7 @@ function ImgMediaCard(props) {
           height="140"
           image={props.image}
           title={props.title}
+          birthday={props.birthday}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">

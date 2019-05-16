@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import Search from '../components/search/Search.js';
 import Header from '../components/header/Header.js';
@@ -9,35 +8,46 @@ class Home extends Component{
     err: null,
     isLoaded: false,
     //actors and shows need to be made into objects
-    actors: [],
-    shows: [],
+    actors: {},
+    shows: {},
     search: '',
   };
-search = e => {
+search = (e,v) => {
   e.preventDefault()
-  this.setState({search: e.target.value})
+  this.setState({search: v})
   console.log(this.state.search)
-  this.fetchData()
+  this.fetchData(v)
   //console.log(this.state.search)
 }
 //fetch data twice, once for shows the other for actors
 componentDidMount() {
   this.fetchData()
 }
-fetchData(){
+fetchData(query){
   Promise.all([
-    fetch(`http://api.tvmaze.com/search/people?q=:${this.state.search}`,{method: 'get'}),
-    fetch(`http://api.tvmaze.com/search/shows?q=:${this.state.search}`,{method: 'get'})
+    fetch(`http://api.tvmaze.com/search/people?q=:${query}`,{method: 'get'}),
+    fetch(`http://api.tvmaze.com/search/shows?q=:${query}`,{method: 'get'})
   ])
-      .then(([res1, res2])=> Promise.all([res1.json(),res2.json()]))
+      .then(([res1, res2]) => Promise.all([res1.json(),res2.json()]))
       .then(
+        
         //make actors and shows into objects i.e. ${data1.person}
-        ([data1, data2]) => {this.setState({
-          actors: data1,
-          shows: data2,
-          isLoaded: true,
-        })
-      },
+        ([data1, data2]) => ([data1.map(actor => ({
+          id: `${actor.person.id}`,
+          name: `${actor.person.name}`,
+          birthday: `${actor.person.birthday}`,
+          image: `${actor.person.image.medium}`
+
+        }))],[data2.res2.map(show => ({
+          id: `${show.show.id}`,
+          name: `${show.show.name}`,
+          summary: `${show.show.summary}`,
+          image: `${show.show.image.medium}`
+        }))]).then(([actors,shows]) => this.setState({
+          actors,
+          shows,
+          isLoaded:true
+        })),
       (err) => {
         this.setState({
           isLoaded: false,
@@ -60,13 +70,12 @@ render() {
       <div>
         <Header />
         <Search search={this.search} />
-        {actors.map(actor => { const {id, alt, image, title }
-          <Card id={actor.person.id} alt={actor.person.name+" picture"} image={actor.person.image.medium} title={actor.person.name}/>
-          // <li key={actor.person.id}>
-          //   <p>{actor.person.name}</p>
-            
-          // </li>
-        })}
+
+
+        {isLoaded && actors.length > 0 ? actors.map(actor => { const {id, name, birthday, image} = actor;  
+          return <Card key={id} alt={name+" picture"} birthday={birthday}image={image} title={name}/>
+        }): null
+      }
         {shows.map(show => (
           <li key={show.show.id}>
             <p>{show.show.name}</p>
