@@ -13,9 +13,12 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const styles = {
   card: {
-    maxWidth: 345,
+    maxWidth: 250,
+    maxHeight: "auto",
+    margin: '1rem'
   },
   media: {
+    padding: ".5rem",
     objectFit: 'cover',
   },
 };
@@ -38,10 +41,13 @@ function ImgMediaCard(props) {
           <Typography gutterBottom variant="h5" component="h2">
             {props.title}
           </Typography>
+          <Typography gutterBottom component="p">
+            {props.rating}
+          </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-      <IconButton aria-label="Add to favorites">
+      <IconButton aria-label="Add to favorites" >
         <FavoriteIcon />
       </IconButton>
         <Button size="small" color="primary">
