@@ -6,19 +6,30 @@ import Description from './pages/Description';
 
 
 
+
 function App() {
   return (
     <Router>
-      <div>
         <section>
           <Route exact path='/' component={Home}/>
           <Route exact path='/Home' component={Home}/>
           <Route exact path='/Favorites' component={Favorites}/>
           <Route exact path='/Description' component={Description}/>
         </section>
-      </div>
     </Router>
   );
 }
 
 export default App;
+
+// const styles = {
+//   div: {
+//       display: "grid",
+//       background: `url("${tvset}") center center no-repeat`,
+//       backgroundSize: '100%',
+//       width: "100%",
+//       hieght: "100%"
+
+
+//   }
+// }

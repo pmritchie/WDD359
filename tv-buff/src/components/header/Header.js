@@ -1,10 +1,22 @@
 import React from 'react';
-import Nav from '../nav/Nav'
+import Navigation from '../nav/Nav'
 
 const Header = props => {
     return(
-       <Nav />
+            <header style={styles.container}>
+                <Navigation/>
+            </header>
+       
     )
 }
 
 export default Header;
+
+const styles = {
+    container: {
+        backgroundColor: "#6c757d"
+      },
+      nav:{
+
+      }
+}
