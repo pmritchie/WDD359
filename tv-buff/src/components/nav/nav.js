@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { NavLink as RRNavLink} from 'react-router-dom'
+
 import { Nav, NavItem, NavLink } from 'reactstrap';
 
 
@@ -14,13 +16,13 @@ export default class Navigation extends Component{
         <div>
           <Nav tabs>
             <NavItem>
-              <NavLink href="/Home">Home</NavLink>
+              <NavLink activeClassName="active" tag={RRNavLink} to="/Home">Home</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/Favorites">Favorites</NavLink>
+              <NavLink activeClassName="active" tag={RRNavLink} to="/Favorites">Favorites</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/Description">Description</NavLink>
+              <NavLink activeClassName="active" tag={RRNavLink} to="/Description">Description</NavLink>
             </NavItem>
           </Nav>
         </div>
@@ -72,13 +74,13 @@ export default class Navigation extends Component{
 //       <div>
 //       <Nav tabs>
 //         <NavItem>
-//           <NavLink href="/Home" active>Home</NavLink>
+//           <NavLink to="/Home" active>Home</NavLink>
 //         </NavItem>
 //         <NavItem>
-//           <NavLink href="/Favorites">Favorites</NavLink>
+//           <NavLink to="/Favorites">Favorites</NavLink>
 //         </NavItem>
 //         <NavItem>
-//           <NavLink href="/Description">Description</NavLink>
+//           <NavLink to="/Description">Description</NavLink>
 //         </NavItem>
 //       </Nav>
 //     </div>
