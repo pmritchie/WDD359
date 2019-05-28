@@ -27,8 +27,8 @@ function ImgMediaCard(props) {
   const { classes } = props;
   return (
     <Card className={classes.card} id={props.id}>
-      <CardActionArea>
-        <CardMedia
+      <CardActionArea >
+        <CardMedia 
           component="img"
           alt={props.alt}
           className={classes.media}
@@ -47,12 +47,9 @@ function ImgMediaCard(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-      <IconButton aria-label="Add to favorites" >
+      <IconButton aria-label="Add to favorites" onClick={() => (props.addFav)}  >
         <FavoriteIcon />
       </IconButton>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
       </CardActions>
     </Card>
   );

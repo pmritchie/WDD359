@@ -12,6 +12,7 @@ class Home extends Component{
     actors: {},
     shows: {},
     search: '',
+    favList: {},
   };
 search = (e,v) => {
   e.preventDefault()
@@ -53,6 +54,7 @@ fetchData(query){
       console.log(data1)
       data2.filter(Boolean)
       //console.log(data1, data2)
+      let favs = JSON.parse(localStorage.getItem('favorites')) || [];
       let pArray = data1.filter(Boolean).map(actor => ({
         id: `${actor.person.id}`,
         name: `${actor.person.name}`,
@@ -65,7 +67,7 @@ fetchData(query){
         rating: `${show.show.rating.average}`,
         image: `${show.show.image.medium}`,
       }))
-      return [pArray,sArray];
+      return [pArray,sArray,];
     })
     .then(([actors,shows]) => this.setState({
       actors,
@@ -81,26 +83,35 @@ fetchData(query){
         
         
 }
-
-parsePeople(peopleData) { 
-  console.log("parsingPeople:",peopleData)
-    return peopleData.map(actor => ({
-      id: `${actor.person.id}`,
-      name: `${actor.person.name}`,
-      birthday: `${actor.person.birthday}`,
-      image: `${actor.person.image.medium}`
-    }));
-}
-
-parseShows(showData) {
-  console.log('parsingShows:',showData);
-  return showData.map(show => ({
-    id: `${show.show.id}`,
-    name: `${show.show.name}`,
-    summary: `${show.show.summary}`,
-    image: `${show.show.image.medium}`,
-  }))
+//function to add favorites to local storage
+addFav= e =>{
+ console.log(e)
 } 
+
+
+
+
+
+
+// parsePeople(peopleData) { 
+//   console.log("parsingPeople:",peopleData)
+//     return peopleData.map(actor => ({
+//       id: `${actor.person.id}`,
+//       name: `${actor.person.name}`,
+//       birthday: `${actor.person.birthday}`,
+//       image: `${actor.person.image.medium}`
+//     }));
+// }
+
+// parseShows(showData) {
+//   console.log('parsingShows:',showData);
+//   return showData.map(show => ({
+//     id: `${show.show.id}`,
+//     name: `${show.show.name}`,
+//     summary: `${show.show.summary}`,
+//     image: `${show.show.image.medium}`,
+//   }))
+// } 
 
 render() {
   const { err, isLoaded, actors, shows } = this.state;
@@ -120,7 +131,7 @@ render() {
           
             {isLoaded && actors.length > 0 ? actors.map(actor => { const {id, name, birthday, image} = actor; 
               //console.log() 
-              return <Card style={styles.card} key={id} alt={name+" picture"} birthday={birthday} image={image} title={name}/>
+              return <Card style={styles.card} key={id} alt={name+" picture"} birthday={birthday} image={image} title={name} addFav={this.addFav(id)}/>
             }): null
             }
           </div>
