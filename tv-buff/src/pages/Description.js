@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Search from '../components/search/Search.js';
 import Header from '../components/header/Header.js';
-import Card from '../components/card/Card';
 import hikers from '../components/images/hikers.jpg';
 import defPic from '../components/images/default.jpeg';
 
@@ -10,15 +9,13 @@ class Description extends Component{
     state = {
         actors: {},
         shows: {},
-        isLoading: true,
+        isLoaded: false,
         search: '',
+        human: false
     }
     componentDidMount(){
         let detailed = JSON.parse(localStorage.getItem("description"))
-       //console.log(detailed)
-        this.fetchData(detailed)
-        //axios.get(`https://api.tvmaze.com/shows/${}?embed[]=episodes&embed[]=cast`)
-       
+        this.fetchData(detailed) 
     }
 
     fetchData(query){
@@ -41,11 +38,18 @@ class Description extends Component{
                     name: `${show.name}`,
                     image: `${show.image.medium}`,
                     rating: `${show.rating.average}`,
+                    summary: `${show.summary}`,
+                    premiered: `${show.premiered}`,
                     fav: false
                   }))  
-                 // console.log(sArray)
-            })
+                 return sArray
+            }).then((shows)=> this.setState({
+                shows,
+                isLoaded:true,
+                human: false
+            }))
         }else{
+            
             fetch(`http://api.tvmaze.com/people/${query.dID}?embed=castcredits`)
             .then((data) => {
                 let output = data.json()
@@ -54,6 +58,7 @@ class Description extends Component{
                 //push object to array
                 let data1 = [];
                 data1.push(stuff) 
+                
                 data1.forEach(function(data){
                     if(data.image == null){
                       data.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
@@ -70,73 +75,139 @@ class Description extends Component{
                     birthday: `${actor.birthday}`,
                     image: `${actor.image.medium}`,
                     fav: false
-                  }))  
-                  console.log(pArray)
-           
-        
-            })
-              
-            
-            // .then((actors) => this.se)
-
+                  })) 
+                  return pArray;
+                }).then((actors) => this.setState({
+                    actors,
+                    isLoaded:true,
+                    human: true
+                  }))
         }        
       }
-   // http://api.tvmaze.com/shows/1?embed[]=episodes&embed[]=cast
     render(){
-       
-        return(
-            <div style={styles.div}>
-                <Header />
-                <Search />
-                <section className="container" >
-                    <div className="row">
-                        <h1>Descriptions Page</h1>
-                    </div>
-                    <div className="row">
-                        <section className="col">
-                            <Card />
-                        </section>
-                        <section className="col">
-                            <h2>Words Words</h2>
-                            <p>First Aired: 12/12/12</p>
-                        </section>
-                    </div>
-                    <div className="row">
-                        <section className="col">
-                            <p>
-                            a lot of words and more words and 
-                            more words and more words and more 
-                            words and more words and more words 
-                            and more words and more words and
-                             more words
-                            and more wordsand more wordsand more words
-                            and more wordsand more wordsand more words
-                            and more wordsand more wordsand more words
-                            </p>
-                        </section>
-                        <section className="col">
-                            <section className="container">
+        
+        const { err, isLoaded, actors, shows} = this.state;
+        
+        if (err) {
+            return <div>Error: {err.message}</div>;
+          } else if (!isLoaded) {
+            return <div>Loading...</div>;
+          } else {
+            return(
+                <div>
+                  {actors.length > 0 ? actors.map(actor => {
+                    const{ name, birthday, image,} = actor;
+            
+                    return(
+                        <div style={styles.div}>
+                            <Header />
+                            <Search />
+                            <section className="container" >
                                 <div className="row">
-                                    <h3>Related Content</h3>
+                                    <h1>Descriptions Page</h1>
                                 </div>
                                 <div className="row">
-                                    <span >
-                                        
-                                        <a href="#/">
-                                        <img alt="hikers" src={hikers} style={styles.img}/>
-                                        link
-                                        </a>
-                                    </span>
+                                    <section className="col">
+                                        <span><img  src={image}></img></span>
+                                    </section>
+                                    <section className="col">
+                                        <h2 >{name}</h2>
+                                        <p>Birthday: {birthday}</p>
+                                    </section>
                                 </div>
-                                <div className="row"></div>
+                                <div className="row">
+                                    <section className="col">
+                                        <p>
+                                        {birthday}
+                                        </p>
+                                    </section>
+                                    <section className="col">
+                                        <section className="container">
+                                            <div className="row">
+                                                <h3>Related Content</h3>
+                                            </div>
+                                            <div className="row">
+                                                <span >
+                                                    
+                                                    <a href="#/">
+                                                    <img alt="hikers" src={hikers} style={styles.img}/>
+                                                    link
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div className="row"></div>
+                                        </section>
+                                    </section>
+                                </div>
                             </section>
-                        </section>
-                    </div>
-                </section>
-            </div>
-        )
+                        </div>
+                    )
+            
+                  }) :null
+                  
+                }
+              
+                {shows.length > 0 ? shows.map(show => {
+                    const{id, name, summary, premiered, rating, image} = show;
+            
+                    return(
+                        <div style={styles.div}>
+                            <Header />
+                            <Search />
+                            <section className="container" >
+                                <div className="row">
+                                    <h1>Descriptions Page</h1>
+                                </div>
+                                <div className="row">
+                                    <section className="col">
+                                        <span><img id={id} src={image}></img></span>
+                                    </section>
+                                    <section className="col">
+                                        <h2>{name}</h2>
+                                        <p>Premiered: {premiered}</p>
+                                        <p>Rating: {rating}</p>
+                                    </section>
+                                </div>
+                                <div className="row">
+                                    <section className="col">
+                                        <p>
+                                        {summary}
+                                        </p>
+                                    </section>
+                                    <section className="col">
+                                        <section className="container">
+                                            <div className="row">
+                                                <h3>Related Content</h3>
+                                            </div>
+                                            <div className="row">
+                                                <span >
+                                                    
+                                                    <a href="#/">
+                                                    <img alt="hikers" src={hikers} style={styles.img}/>
+                                                    link
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div className="row"></div>
+                                        </section>
+                                    </section>
+                                </div>
+                            </section>
+                        </div>
+                    )
+            
+                  }) :null
+                  
+                }
+                </div>
+               
+                )
+                 
+            }        
+            }
+            
+            
     }
-}
 
 export default Description;
 
@@ -148,8 +219,7 @@ const styles = {
         hieght: "100%"
     },
     card: {
-        margin: ".5rem",
-        padding: ".5"
+      
     },
     img: {
         maxWidth: "10rem",
