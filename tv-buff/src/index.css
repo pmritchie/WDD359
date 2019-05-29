@@ -2,7 +2,7 @@ body {
  
   background-image: url("components/images/tvset.jpg");
   background-repeat: no-repeat;
-  background-position: right top;
+  background-position: center;
   background-attachment: fixed;
   background-size: contain, cover;
 
