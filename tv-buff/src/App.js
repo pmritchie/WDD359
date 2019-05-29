@@ -1,13 +1,14 @@
 import React from 'react';
-import {BrowserRouter as Router, Route } from 'react-router-dom'
+import {HashRouter as Router, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Favorites from './pages/Favorites';
 import Description from './pages/Description';
 
-
+//hash router
 
 
 function App() {
+  
   return (
     <Router>
         <section>
@@ -22,14 +23,3 @@ function App() {
 
 export default App;
 
-// const styles = {
-//   div: {
-//       display: "grid",
-//       background: `url("${tvset}") center center no-repeat`,
-//       backgroundSize: '100%',
-//       width: "100%",
-//       hieght: "100%"
-
-
-//   }
-// }

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Search from '../components/search/Search.js';
 import Header from '../components/header/Header.js';
-import Card from '../components/card/Card'
-import defPic from '../components/images/default.jpeg'
+import Card from '../components/card/Card';
+import defPic from '../components/images/default.jpeg';
+
+
 
 class Home extends Component{
   state = {
@@ -12,6 +14,8 @@ class Home extends Component{
     actors: {},
     shows: {},
     search: '',
+    favList: [],
+    dID: '',
   };
 search = (e,v) => {
   e.preventDefault()
@@ -22,18 +26,17 @@ search = (e,v) => {
 }
 //fetch data twice, once for shows the other for actors
 componentDidMount() {
-  this.fetchData("friends")
+  this.fetchData("Drew")
 }
 
 fetchData(query){
   Promise.all([
-    fetch(`http://api.tvmaze.com/search/people?q=:${query}`,{method: 'get'}),
-    fetch(`http://api.tvmaze.com/search/shows?q=:${query}`,{method: 'get'})
+    fetch(`https://api.tvmaze.com/search/people?q=:${query}`,{method: 'get'}),
+    fetch(`https://api.tvmaze.com/search/shows?q=:${query}`,{method: 'get'})
   ])
   .then(([prom1, prom2]) => {
-    //console.log('prom1:',prom1)
+    //convert into json
     let output = Promise.all([prom1.json(),prom2.json()])
-    //console.log('output',output)
     return output;
   })
   .then(
@@ -50,61 +53,71 @@ fetchData(query){
           data.show.rating = {average: "N/A"}
         }
      })
-      console.log(data1)
+      //console.log(data1)
       data2.filter(Boolean)
-      //console.log(data1, data2)
+      
+     // make local copy of localStorage
+      //let favs = JSON.parse(localStorage.getItem('favorites')) || [];
+
+
       let pArray = data1.filter(Boolean).map(actor => ({
         id: `${actor.person.id}`,
         name: `${actor.person.name}`,
         birthday: `${actor.person.birthday}`,
-       image: `${actor.person.image.medium}`
+       image: `${actor.person.image.medium}`,
+       fav: false
       }));
       let sArray = data2.map(show => ({
         id: `${show.show.id}`,
         name: `${show.show.name}`,
         rating: `${show.show.rating.average}`,
         image: `${show.show.image.medium}`,
+        fav: false
       }))
-      return [pArray,sArray];
+      console.log(pArray[0].id)
+      if(pArray[0].id === 2418){
+          pArray[0].fav = true;
+          console.log(pArray[0].fav)
+      }
+      return [pArray,sArray,];
     })
     .then(([actors,shows]) => this.setState({
       actors,
       shows,
       isLoaded:true
     }))
-    // ,
-    //   (err) => {
-    //     this.setState({
-    //       isLoaded: false,
-    //       err
-    //     });
+  
         
         
 }
-
-parsePeople(peopleData) { 
-  console.log("parsingPeople:",peopleData)
-    return peopleData.map(actor => ({
-      id: `${actor.person.id}`,
-      name: `${actor.person.name}`,
-      birthday: `${actor.person.birthday}`,
-      image: `${actor.person.image.medium}`
-    }));
-}
-
-parseShows(showData) {
-  console.log('parsingShows:',showData);
-  return showData.map(show => ({
-    id: `${show.show.id}`,
-    name: `${show.show.name}`,
-    summary: `${show.show.summary}`,
-    image: `${show.show.image.medium}`,
-  }))
+//function to add favorites to local storage
+addFav = id => {
+  //console.log(id)
+  let favList = [...this.state.favList]
+  favList.push({id:id })
+  console.log(favList)
+      this.setState({favList})
+      localStorage.setItem('favorites', JSON.stringify(favList))
 } 
+detailed = (id,person)=> {
+  let dID = {dID:id, human:person}
+  localStorage.setItem('description', JSON.stringify(dID))
+  this.props.history.push('/Description')
+
+  console.log(id)
+
+}
+
+
+
+
+
+
 
 render() {
+
   const { err, isLoaded, actors, shows } = this.state;
-  console.log(actors)
+  //console.log(actors)
   if (err) {
     return <div>Error: {err.message}</div>;
   } else if (!isLoaded) {
@@ -119,9 +132,18 @@ render() {
           <div className="row">
           
             {isLoaded && actors.length > 0 ? actors.map(actor => { const {id, name, birthday, image} = actor; 
+              const person = true;
               //console.log() 
-              return <Card style={styles.card} key={id} alt={name+" picture"} birthday={birthday} image={image} title={name}/>
-            }): null
+                    return <Card 
+                            style={styles.card} 
+                            key={id} alt={name+" picture"} 
+                            birthday={birthday} 
+                            image={image} 
+                            title={name} 
+                            addFav={()=>this.addFav(id)} 
+                            detailed={()=>this.detailed(id,person)}
+                      />
+                  }): null
             }
           </div>
         </section>
@@ -130,8 +152,16 @@ render() {
           <div className="row">
           
           {isLoaded && actors.length > 0 ? shows.map(show => { const {id, name, rating, image} = show;  
-            return <Card style={styles.card} key={id} alt={name+" picture"} rating={"Rating: "+rating} image={image} title={name}/>
-          }): null
+            const person = false;
+                  return <Card 
+                          style={styles.card} 
+                          key={id} alt={name+" picture"} 
+                          rating={"Rating: "+rating} 
+                          image={image} 
+                          title={name}
+                          detailed={()=>this.detailed(id,person)}
+                          />
+                  }): null
           }
             </div>
         </section>
@@ -170,3 +200,33 @@ const styles = {
             //       <p>{item.name}</p>
             //     </li>
             //   )})}
+
+
+
+///////////////////////////////////////////////////////////
+// parsePeople(peopleData) { 
+//   console.log("parsingPeople:",peopleData)
+//     return peopleData.map(actor => ({
+//       id: `${actor.person.id}`,
+//       name: `${actor.person.name}`,
+//       birthday: `${actor.person.birthday}`,
+//       image: `${actor.person.image.medium}`
+//     }));
+// }
+
+// parseShows(showData) {
+//   console.log('parsingShows:',showData);
+//   return showData.map(show => ({
+//     id: `${show.show.id}`,
+//     name: `${show.show.name}`,
+//     summary: `${show.show.summary}`,
+//     image: `${show.show.image.medium}`,
+//   }))
+// } 
+//////////////////////////////////////////////////
+  // ,
+    //   (err) => {
+    //     this.setState({
+    //       isLoaded: false,
+    //       err
+    //     });

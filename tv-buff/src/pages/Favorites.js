@@ -7,7 +7,14 @@ class Favorites extends Component{
         isLoading: true,
         search: '',
     }
-
+    //load favorites
+ favorites(){
+    //  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    //  favorites.forEach(function(favorite){
+    //     document.getElementById(favorite).className ="fav";
+    //  })
+ }
+ //
     render(){
         return(
             <div>

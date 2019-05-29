@@ -14,9 +14,7 @@ export default Header;
 
 const styles = {
     container: {
-        backgroundColor: "#6c757d"
-      },
-      nav:{
-
+        backgroundColor: "#6c757d",
+        minHeight: "3rem"
       }
 }
