@@ -64,11 +64,6 @@ class Description extends Component{
                       data.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
                     }
                  })   
-                data1.forEach(function(data){
-                    if(data.image == null){
-                      data.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
-                    }
-                 })
                 let pArray = data1.map(actor => ({
                     id: `${actor.id}`,
                     name: `${actor.name}`,
@@ -93,6 +88,7 @@ class Description extends Component{
           } else if (!isLoaded) {
             return <div>Loading...</div>;
           } else {
+            
             return(
                 <div>
                   {actors.length > 0 ? actors.map(actor => {

@@ -54,14 +54,8 @@ fetchData(query){
           data.show.rating = {average: "N/A"}
         }
      })
-      //console.log(data1)
-      data2.filter(Boolean)
-      
-     // make local copy of localStorage
-      //let favs = JSON.parse(localStorage.getItem('favorites')) || [];
 
-
-      let pArray = data1.filter(Boolean).map(actor => ({
+      let pArray = data1.map(actor => ({
         id: `${actor.person.id}`,
         name: `${actor.person.name}`,
         birthday: `${actor.person.birthday}`,
@@ -128,7 +122,7 @@ detailed = (id,person)=> {
 render() {
   
   const { err, isLoaded, actors, shows } = this.state;
-  //console.log(actors)
+  console.log(actors)
   if (err) {
     return <div>Error: {err.message}</div>;
   } else if (!isLoaded) {
@@ -162,7 +156,7 @@ render() {
         <section className="container">
           <div className="row">
           
-          {isLoaded && actors.length > 0 ? shows.map(show => { const {id, name, rating, image} = show;  
+          {isLoaded && shows.length > 0 ? shows.map(show => { const {id, name, rating, image} = show;  
             const person = false;
                   return <Card 
                           style={styles.card} 
@@ -170,6 +164,7 @@ render() {
                           rating={"Rating: "+rating} 
                           image={image} 
                           title={name}
+                          addFav={()=>this.addFav(id,person)}
                           detailed={()=>this.detailed(id,person)}
                           />
                   }): null
