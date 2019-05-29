@@ -8,12 +8,11 @@ class Favorites extends Component{
         search: '',
     }
     //load favorites
- favorites(){
-    //  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    //  favorites.forEach(function(favorite){
-    //     document.getElementById(favorite).className ="fav";
-    //  })
- }
+    componentDidMount(){
+        let favorites = JSON.parse(localStorage.getItem('favorites'))
+        console.log(favorites)
+        //this.fetchData(favorites) 
+    }
  //
     render(){
         return(

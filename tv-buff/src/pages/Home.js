@@ -74,7 +74,6 @@ fetchData(query){
         image: `${show.show.image.medium}`,
         fav: false
       }))
-      console.log(pArray[0].id)
       if(pArray[0].id === 2418){
           pArray[0].fav = true;
           console.log(pArray[0].fav)
@@ -91,21 +90,34 @@ fetchData(query){
         
 }
 //function to add favorites to local storage
-addFav = id => {
-  //console.log(id)
+addFav = (id,person) => {
+  
   let favList = [...this.state.favList]
-  favList.push({id:id })
+  let existing = JSON.parse(localStorage.getItem("favorites"))
   console.log(favList)
+  // if(favList.length === 0){
+
+  //   for(let i =0; i <= favList.length; i++){
+  //     // if(existing[i].id === favList[i].id){
+  //     //   existing.splice(i, 1)
+  
+  //     // }
+  // }}else{
+  //   return null;
+  // }
+  
+  
+  
+  favList.push({id:id,human:person})
+  //console.log(favList)
       this.setState({favList})
       localStorage.setItem('favorites', JSON.stringify(favList))
+      
 } 
 detailed = (id,person)=> {
   let dID = {dID:id, human:person}
   localStorage.setItem('description', JSON.stringify(dID))
   this.props.history.push('/Description')
-
-  console.log(id)
-
 }
 
 
@@ -115,7 +127,7 @@ detailed = (id,person)=> {
 
 
 render() {
-
+  
   const { err, isLoaded, actors, shows } = this.state;
   //console.log(actors)
   if (err) {
@@ -140,7 +152,7 @@ render() {
                             birthday={birthday} 
                             image={image} 
                             title={name} 
-                            addFav={()=>this.addFav(id)} 
+                            addFav={()=>this.addFav(id,person)} 
                             detailed={()=>this.detailed(id,person)}
                       />
                   }): null
