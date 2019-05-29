@@ -17,6 +17,7 @@ class Home extends Component{
     favList: [],
     dID: '',
   };
+  
 search = (e,v) => {
   e.preventDefault()
   this.setState({search: v})
@@ -91,28 +92,26 @@ fetchData(query){
 }
 //function to add favorites to local storage
 addFav = (id,person) => {
-  
   let favList = [...this.state.favList]
-  let existing = JSON.parse(localStorage.getItem("favorites"))
+  
   console.log(favList)
-  // if(favList.length === 0){
-
-  //   for(let i =0; i <= favList.length; i++){
-  //     // if(existing[i].id === favList[i].id){
-  //     //   existing.splice(i, 1)
-  
-  //     // }
-  // }}else{
-  //   return null;
-  // }
-  
-  
-  
+if(favList.length === 0){
   favList.push({id:id,human:person})
-  //console.log(favList)
       this.setState({favList})
       localStorage.setItem('favorites', JSON.stringify(favList))
-      
+      //redirect
+}else{
+  favList.forEach(function(item, index){
+       if(item.id === id){
+         favList.splice(index,1)
+       }
+    })
+        favList.push({id:id,human:person})
+        this.setState({favList})
+        localStorage.setItem('favorites', JSON.stringify(favList))
+  
+}
+
 } 
 detailed = (id,person)=> {
   let dID = {dID:id, human:person}
@@ -242,3 +241,11 @@ const styles = {
     //       isLoaded: false,
     //       err
     //     });
+    /////////////////////////
+         //  }else{
+      //   console.log(item.id, index)
+      //   favList.push({id:id,human:person})
+      //   this.setState({favList})
+      //   localStorage.setItem('favorites', JSON.stringify(favList))
+      //  }
+    
