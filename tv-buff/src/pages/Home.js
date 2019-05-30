@@ -19,11 +19,13 @@ class Home extends Component{
   };
   
 search = (e,v) => {
-  e.preventDefault()
-  this.setState({search: v})
-  //console.log(this.state.search)
-  this.fetchData(v)
-  //console.log(this.state.search)
+  e.preventDefault();
+  //change v to array and split where spaces then at +
+  console.log(v);
+  this.setState({search: v});
+  
+  this.fetchData(v);
+ 
 }
 //fetch data twice, once for shows the other for actors
 componentDidMount() {
@@ -71,7 +73,7 @@ fetchData(query){
       }))
       if(pArray[0].id === 2418){
           pArray[0].fav = true;
-          console.log(pArray[0].fav)
+          
       }
       return [pArray,sArray,];
     })
@@ -86,28 +88,38 @@ fetchData(query){
 }
 //function to add favorites to local storage
 addFav = (id,person) => {
-  let favList = [...this.state.favList]
   
-  console.log(favList)
+  
+  
+  let favList = [...this.state.favList]
 if(favList.length === 0){
-  favList.push({id:id,human:person})
+  favList.push({id:id,human:person});
+  
       this.setState({favList})
       localStorage.setItem('favorites', JSON.stringify(favList))
       //redirect
 }else{
+  const storage = [...JSON.parse(localStorage.getItem('favorites'))] || [];
   favList.forEach(function(item, index){
        if(item.id === id){
-         favList.splice(index,1)
+         favList.splice(index,1);
        }
     })
-        favList.push({id:id,human:person})
-        this.setState({favList})
-        localStorage.setItem('favorites', JSON.stringify(favList))
+    storage.forEach(function(item, index){
+      if(item.id === id){
+        storage.splice(index,1);
+      }
+   })
+        storage.push({id:id, human:person});
+        console.log(storage);
+        favList.push({id:id,human:person});
+        this.setState({favList});
+        localStorage.setItem('favorites', JSON.stringify(storage));
   
 }
 
 } 
-detailed = (id,person)=> {
+detailed = (id,person) => {
   let dID = {dID:id, human:person}
   localStorage.setItem('description', JSON.stringify(dID))
   this.props.history.push('/Description')
@@ -120,9 +132,9 @@ detailed = (id,person)=> {
 
 
 render() {
-  
+  console.log(this.state.favList)
+  console.log(JSON.parse(localStorage.getItem('favorites')))
   const { err, isLoaded, actors, shows } = this.state;
-  console.log(actors)
   if (err) {
     return <div>Error: {err.message}</div>;
   } else if (!isLoaded) {
@@ -131,8 +143,19 @@ render() {
     return (
       <div style={styles.div}>
         <Header />
-        <Search search={this.search} />
-        <h2>People</h2>
+        <div className="container">
+          <div className="row mt-5">
+            <div className="col" style={styles.headerCol}>
+              <h1 style={styles.header} >TV BUFF!</h1>
+            </div>
+            <div className="col" style={styles.searchCol} >
+              <Search search={this.search} />
+            </div>
+            
+          </div>
+          
+        </div>
+        <h2 style={styles.h2}>People</h2>
         <section className="container">
           <div className="row">
           
@@ -152,7 +175,7 @@ render() {
             }
           </div>
         </section>
-        <h2>Shows</h2>
+        <h2 style={styles.h2}>Shows</h2>
         <section className="container">
           <div className="row">
           
@@ -181,18 +204,40 @@ export default Home;
 
 const styles = {
   div: {
+      
       display: "grid",
       backgroundSize: '100%',
       width: "100%",
-      hieght: "100%"
+      hieght: "100%",
+      fontFamily: "'Freckle Face', cursive",
+      color: "#F9D780",
+
   },
   section:{
-      display: "grid"
+      display: "grid",
   },
   card: {
-      margin: ".5rem",
-      padding: ".5",
-      maxWidth: "400"
+    fontFamily: "'Freckle Face', cursive",
+    color: "#F9D780",
+      
+  },
+  header:{
+    fontSize: "84px",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  headerCol:{
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "3rem"
+  },
+  searchCol: {
+    marginTop: "1rem"
+  },
+  h2: {
+    fontSize: "64px",
+    marginTop: "10rem",
+    marginLeft: "15rem"
 
   }
   

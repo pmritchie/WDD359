@@ -16,43 +16,22 @@ const styles = {
     maxWidth: 240,
     minHeight: 300,
     maxHeight: 350,
-    margin: '1rem'
+    margin: '1rem',
+    fontFamily: "'Freckle Face', cursive",
+    backgroundColor: "#93B1AF",
+    borderRadius: "5px",
+
   },
   media: {
     padding: ".5rem",
     objectFit: 'cover',
+    minHeight: 200,
   },
-  fav : {
-    justifyContent: "center"
-  }
+  button: {
+    justifyContent: "center",
+  },
 };
-// export default ({addFav,id, alt, image, title, birthday, rating}) =>
-// <Card  id={id} style={styles.card}>
-//       <CardActionArea >
-//         <CardMedia 
-//           component="img"
-//           alt={alt}
-//           style={styles.media}
-//           height="140"
-//           image={image}
-//           title={title}
-//           birthday={birthday}
-//         />
-//         <CardContent>
-//           <Typography gutterBottom variant="h5" component="h2">
-//             {title}
-//           </Typography>
-//           <Typography gutterBottom component="p">
-//             {rating}
-//           </Typography>
-//         </CardContent>
-//       </CardActionArea>
-//       <CardActions style={styles.fav}>
-//       <IconButton aria-label="Add to favorites" addFav={addFav}>
-//         <FavoriteIcon />
-//       </IconButton>
-//       </CardActions>
-//     </Card>
+
 
 
 
@@ -77,17 +56,17 @@ function ImgMediaCard(props) {
           birthday={props.birthday}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
+          <Typography gutterBottom variant="h5" component="h2" style={props.style}>
             {props.title}
           </Typography>
-          <Typography gutterBottom component="p">
+          <Typography gutterBottom component="p" style={props.style}>
             {props.rating}
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
-      <IconButton aria-label="Add to favorites" onClick={props.addFav}>
-        <FavoriteIcon />
+      <CardActions style={styles.button}>
+      <IconButton aria-label="Add to favorites" onClick={props.addFav} style={styles.button} className="btn">
+        <FavoriteIcon className="notActive"/>
       </IconButton>
       </CardActions>
     </Card>
