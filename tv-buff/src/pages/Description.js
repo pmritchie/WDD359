@@ -7,15 +7,19 @@ import defPic from '../components/images/default.jpeg';
 
 class Description extends Component{
     state = {
-        actors: {},
-        shows: {},
+        actors: [],
+        shows: [],
         isLoaded: false,
         search: '',
         human: false
     }
     componentDidMount(){
-        let detailed = JSON.parse(localStorage.getItem("description"))
-        this.fetchData(detailed) 
+        let detailed = JSON.parse(localStorage.getItem("description")) || [];
+        console.log(detailed)
+        if(detailed.length === 0){
+            this.setState({isLoaded: true})
+        }else{this.fetchData(detailed) }
+        
     }
 
     fetchData(query){
@@ -81,79 +85,79 @@ class Description extends Component{
       }
     render(){
         
-        const { err, isLoaded, actors, shows} = this.state;
-        
+        const { err, isLoaded, actors, shows, human} = this.state;
+        console.log(actors.length)
         if (err) {
             return <div>Error: {err.message}</div>;
-          } else if (!isLoaded) {
+        } else if (!isLoaded) {
             return <div>Loading...</div>;
-          } else {
-            
+        } else {
             return(
-                <div>
-                  {actors.length > 0 ? actors.map(actor => {
-                    const{ name, birthday, image,} = actor;
-            
-                    return(
-                        <div style={styles.div}>
-                            <Header />
-                            <Search />
-                            <section className="container" >
-                                <div className="row">
-                                    <h1>Descriptions Page</h1>
-                                </div>
-                                <div className="row">
-                                    <section className="col">
-                                        <span><img  src={image}></img></span>
-                                    </section>
-                                    <section className="col">
-                                        <h2 >{name}</h2>
-                                        <p>Birthday: {birthday}</p>
-                                    </section>
-                                </div>
-                                <div className="row">
-                                    <section className="col">
-                                        <p>
-                                        {birthday}
-                                        </p>
-                                    </section>
-                                    <section className="col">
-                                        <section className="container">
-                                            <div className="row">
-                                                <h3>Related Content</h3>
-                                            </div>
-                                            <div className="row">
-                                                <span >
-                                                    
-                                                    <a href="#/">
-                                                    <img alt="hikers" src={hikers} style={styles.img}/>
-                                                    link
-                                                    </a>
-                                                </span>
-                                            </div>
-                                            <div className="row"></div>
-                                        </section>
-                                    </section>
-                                </div>
-                            </section>
+
+
+                
+                <div style={styles.div}>
+                    <Header />
+                    
+                    <div className="container" style={styles.hContainer}>   
+                        <div className="row mt-5 justify-content-center" style={styles.headerRow}>
+                            <h1 className="col-6" style={styles.h1}  >Descriptions Page</h1>
                         </div>
+                   
+                    </div>
+                        {human && actors.length > 0 ? actors.map(actor => {
+                            const{ name, birthday, image,} = actor;
+            
+                            return(
+                                
+                                    <section className="container ml-5" >
+                                        <div className="row justify-content-center" >
+                                            <div className="col">
+                                               
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <section className="col">
+                                                <span><img  src={image}></img></span>
+                                            </section>
+                                            <section className="col">
+                                                <h2 >{name}</h2>
+                                                <p>Birthday: {birthday}</p>
+                                            </section>
+                                        </div>
+                                        <div className="row">
+                                            <section className="col">
+                                                <p>{birthday}</p>
+                                            </section>
+                                            <section className="col">
+                                                <section className="container">
+                                                    <div className="row">
+                                                        <h3>Related Content</h3>
+                                                    </div>
+                                                    <div className="row">
+                                                        <span>
+                                                            <a href="#/"><img alt="hikers" src={hikers} style={styles.img}/>link</a>
+                                                         </span>
+                                                    </div>
+                                                    <div className="row">
+                                                    </div>
+                                                </section>
+                                            </section>
+                                        </div>
+                                    </section>
+                                
                     )
             
                   }) :null
                   
                 }
               
-                {shows.length > 0 ? shows.map(show => {
+                {!human && shows.length > 0 ? shows.map(show => {
                     const{id, name, summary, premiered, rating, image} = show;
             
                     return(
                         <div style={styles.div}>
-                            <Header />
-                            <Search />
                             <section className="container" >
-                                <div className="row">
-                                    <h1>Descriptions Page</h1>
-                                </div>
                                 <div className="row">
                                     <section className="col">
                                         <span><img id={id} src={image}></img></span>
@@ -166,7 +170,7 @@ class Description extends Component{
                                 </div>
                                 <div className="row">
                                     <section className="col">
-                                        <p>
+                                        <p style={styles.p}>
                                         {summary}
                                         </p>
                                     </section>
@@ -212,14 +216,29 @@ const styles = {
         display: "grid",
         backgroundSize: '100%',
         width: "100%",
-        hieght: "100%"
+        hieght: "100%",
+        fontFamily: "'Freckle Face', cursive",
+        color: "#F9D780",
     },
-    card: {
-      
+    hContainer:{
+        width: "100%",
+        marginTop: "5rem",
+        marginBottom: "5rem"
     },
     img: {
         maxWidth: "10rem",
         maxHeight: "rem"
+    },
+    hRow: {
+        marginTop:"10rem",
+        justifyContent: "center"
+    },
+    nav:{
+        marginBottom: "20rem"
+    },
+    h1:{
+        fontSize: "64px"
     }
+
     
 }

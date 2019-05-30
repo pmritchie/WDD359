@@ -1,9 +1,10 @@
 import React from 'react';
 import Navigation from '../nav/Nav'
+import './Header.css'
 
 const Header = props => {
     return(
-            <header style={styles.container}>
+            <header className="header">
                 <Navigation/>
             </header>
        
@@ -11,10 +12,3 @@ const Header = props => {
 }
 
 export default Header;
-
-const styles = {
-    container: {
-        backgroundColor: "#6c757d",
-        minHeight: "3rem"
-      }
-}

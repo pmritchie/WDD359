@@ -1,11 +1,11 @@
 import React from 'react'
-// import './MyBtn.css'
+import './MyBtn.css'
 
 //Dummy Component
 const MyBtn = props => {  
   return (
     <button style={props.style} type={props.submit}>
-     {props.btnText}
+    <i className="material-icons md-36">search</i>
     </button>
   )
 }
