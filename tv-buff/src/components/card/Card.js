@@ -9,6 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import { red, yellow } from '@material-ui/core/colors';
 
 const styles = {
   card: {
@@ -30,6 +31,12 @@ const styles = {
   button: {
     justifyContent: "center",
   },
+  icon_checked:{
+    color: "red"
+  },
+  icon_unchecked: {
+    color: "yellow"
+  }
 };
 
 
@@ -44,7 +51,7 @@ function ImgMediaCard(props) {
   const { classes,  } = props;
   
   return (
-    <Card className={classes.card} id={props.id}>
+    <Card className={classes.card} >
       <CardActionArea onClick={props.detailed}>
         <CardMedia 
           component="img"
@@ -66,7 +73,7 @@ function ImgMediaCard(props) {
       </CardActionArea>
       <CardActions style={styles.button}>
       <IconButton aria-label="Add to favorites" onClick={props.addFav} style={styles.button} className="btn">
-        <FavoriteIcon className="notActive"/>
+        <FavoriteIcon className="notActive" id={props.id} style={props.fav ? styles.icon_checked : styles.icon_unchecked}/>
       </IconButton>
       </CardActions>
     </Card>

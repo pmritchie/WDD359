@@ -53,8 +53,8 @@ class Description extends Component{
                 human: false
             }))
         }else{
-            
-            fetch(`http://api.tvmaze.com/people/${query.dID}?embed=castcredits`)
+            //Change api over too - http://api.tvmaze.com/people/1/castcredits?embed=show
+            fetch(`https://api.tvmaze.com/people/${query.dID}?embed=castcredits`)
             .then((data) => {
                 let output = data.json()
                 return output

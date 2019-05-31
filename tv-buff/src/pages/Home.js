@@ -19,44 +19,61 @@ class Home extends Component{
   };
   
 search = (e,v) => {
+  console.log(v)
   e.preventDefault();
   //change v to array and split where spaces then at +
-  console.log(v);
-  this.setState({search: v});
-  
-  this.fetchData(v);
  
+  //send local storage here to fetch data to check for favorites // turn heart red
+
+  localStorage.setItem('search', JSON.stringify(v))
+  //this.setState({search: v});
+  this.fetchData(v);
 }
-//fetch data twice, once for shows the other for actors
+
 componentDidMount() {
-  this.fetchData("Drew")
+  //load data from localStorage here
+  const storage = JSON.parse(localStorage.getItem('favorites'));
+ 
+  if(storage === null){
+    console.log("null")
+    this.setState({favList: [{id:0, fav:false, human:false}]})
+    localStorage.setItem('favorites',JSON.stringify([{id:0, fav:false, human:false}]))
+
+  }else{
+    console.log("not null")
+    this.setState({favList: storage})
+  }
+ 
+  this.fetchData("Mimi")
 }
 
 fetchData(query){
+  //fetch data twice, once for shows the other for actors
   Promise.all([
     fetch(`https://api.tvmaze.com/search/people?q=:${query}`,{method: 'get'}),
     fetch(`https://api.tvmaze.com/search/shows?q=:${query}`,{method: 'get'})
   ])
   .then(([prom1, prom2]) => {
     //convert into json
-    let output = Promise.all([prom1.json(),prom2.json()])
+    let output = Promise.all([prom1.json(),prom2.json()]);
     return output;
   })
   .then(
     (stuff) => {
       let [data1,data2] = stuff;
+      //loop through data to check for null value's replace with value
       data1.forEach(function(data){
          if(data.person.image == null){
-           data.person.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
+           data.person.image = {medium: `${defPic}`, large: "./images/hikers.jpg"};
          }
       })
       data2.forEach(function(data){
         if(data.show.image == null || data.show.rating.average == null){
-          data.show.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
-          data.show.rating = {average: "N/A"}
+          data.show.image = {medium: `${defPic}`, large: "./images/hikers.jpg"};
+          data.show.rating = {average: "N/A"};
         }
      })
-
+     // create array of objects
       let pArray = data1.map(actor => ({
         id: `${actor.person.id}`,
         name: `${actor.person.name}`,
@@ -70,36 +87,50 @@ fetchData(query){
         rating: `${show.show.rating.average}`,
         image: `${show.show.image.medium}`,
         fav: false
-      }))
-      if(pArray[0].id === 2418){
-          pArray[0].fav = true;
-          
+      }));
+      for( let i = 0; i < sArray.length; i++ ){
+        let tempA = [...this.state.favList]
+        let check = sArray[i].id;
+        for(let v = 0; v < tempA.length; v++){
+          if(check === tempA[v].id){
+            sArray[i].fav = true;
+            console.log(sArray[i].fav)
+          }
+        }
       }
+      for( let i = 0; i < pArray.length; i++ ){
+        let tempA = [...this.state.favList]
+        let check = pArray[i].id;
+        for(let v = 0; v < tempA.length; v++){
+          if(check === tempA[v].id){
+            pArray[i].fav = true;
+            console.log(sArray[i].fav)
+          }
+        }
+      }
+
       return [pArray,sArray,];
     })
     .then(([actors,shows]) => this.setState({
       actors,
       shows,
       isLoaded:true
-    }))
-  
-        
-        
+    }));
 }
 //function to add favorites to local storage
-addFav = (id,person) => {
-  
-  
-  
+addFav = (id,person, e) => {
+ 
+  console.log(e);
+  //check state favList for items, if empty set localStorage and favList
   let favList = [...this.state.favList]
 if(favList.length === 0){
-  favList.push({id:id,human:person});
-  
-      this.setState({favList})
-      localStorage.setItem('favorites', JSON.stringify(favList))
-      //redirect
+      favList.push({id:id,human:person,fav:true});
+      this.setState({favList});
+      localStorage.setItem('favorites', JSON.stringify(favList));
+      //redirect or not to direct 
 }else{
-  const storage = [...JSON.parse(localStorage.getItem('favorites'))] || [];
+
+  const storage = [...JSON.parse(localStorage.getItem('favorites'))];
   favList.forEach(function(item, index){
        if(item.id === id){
          favList.splice(index,1);
@@ -110,8 +141,8 @@ if(favList.length === 0){
         storage.splice(index,1);
       }
    })
-        storage.push({id:id, human:person});
-        console.log(storage);
+        storage.push({id:id, human:person,fav:true});
+        //console.log(storage);
         favList.push({id:id,human:person});
         this.setState({favList});
         localStorage.setItem('favorites', JSON.stringify(storage));
@@ -120,9 +151,9 @@ if(favList.length === 0){
 
 } 
 detailed = (id,person) => {
-  let dID = {dID:id, human:person}
-  localStorage.setItem('description', JSON.stringify(dID))
-  this.props.history.push('/Description')
+  let dID = {dID:id, human:person};
+  localStorage.setItem('description', JSON.stringify(dID));
+  this.props.history.push('/Description');
 }
 
 
@@ -132,9 +163,9 @@ detailed = (id,person) => {
 
 
 render() {
-  console.log(this.state.favList)
-  console.log(JSON.parse(localStorage.getItem('favorites')))
-  const { err, isLoaded, actors, shows } = this.state;
+  console.log(this.state.favList);
+  console.log(JSON.parse(localStorage.getItem('favorites')));
+  const { err, isLoaded, actors, shows, favList } = this.state;
   if (err) {
     return <div>Error: {err.message}</div>;
   } else if (!isLoaded) {
@@ -151,15 +182,13 @@ render() {
             <div className="col" style={styles.searchCol} >
               <Search search={this.search} />
             </div>
-            
           </div>
-          
         </div>
         <h2 style={styles.h2}>People</h2>
         <section className="container">
           <div className="row">
           
-            {isLoaded && actors.length > 0 ? actors.map(actor => { const {id, name, birthday, image} = actor; 
+            {isLoaded && actors.length > 0 ? actors.map(actor => { const {id, name, birthday, image, fav} = actor; 
               const person = true;
               //console.log() 
                     return <Card 
@@ -167,9 +196,11 @@ render() {
                             key={id} alt={name+" picture"} 
                             birthday={birthday} 
                             image={image} 
-                            title={name} 
-                            addFav={()=>this.addFav(id,person)} 
+                            title={name}
+                            fav={fav}
+                            addFav={(e)=>this.addFav(id,person,e)} 
                             detailed={()=>this.detailed(id,person)}
+                            id={id}
                       />
                   }): null
             }
@@ -179,14 +210,22 @@ render() {
         <section className="container">
           <div className="row">
           
-          {isLoaded && shows.length > 0 ? shows.map(show => { const {id, name, rating, image} = show;  
+          {isLoaded && shows.length > 0 ? shows.map(show => { const {id, name, rating, image, fav} = show;  
             const person = false;
+            favList.forEach(function(item){
+              if(item.id === id){
+
+              }
+            })
+          
                   return <Card 
                           style={styles.card} 
                           key={id} alt={name+" picture"} 
                           rating={"Rating: "+rating} 
                           image={image} 
                           title={name}
+                          id={id}
+                          fav={fav}
                           addFav={()=>this.addFav(id,person)}
                           detailed={()=>this.detailed(id,person)}
                           />
@@ -238,10 +277,9 @@ const styles = {
     fontSize: "64px",
     marginTop: "10rem",
     marginLeft: "15rem"
-
-  }
+  },
   
-}
+};
  // <img src={show.show.image.medium} />
             // <a></a>
             // {shows.map(item => {

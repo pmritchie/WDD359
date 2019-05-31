@@ -31,7 +31,6 @@ export default Search;
 
 const styles= {
     input: {
-  
       borderRadius: '20px',
       border: 'solid black 1px',
       textIndent: '5%',
