@@ -1,10 +1,10 @@
-##Project and Portfolio V
+#Project and Portfolio V
 
 
-#About
+##About
 This repo is for a school project using client-side code and incorperating third party APIs. React.js is the framework I will be using to build this web-app. Updates will be made here when more details and direction is decided for the project.
 
-#Requirements
+##Requirements
 Requirements for this project are as follows.
   - API Functionality
   - Multiple Application States
@@ -14,4 +14,7 @@ Requirements for this project are as follows.
   - Javascript Framework
   - Notation throughout code
   
+##Link
+* [GH-Page](https://pmritchie.github.io/WDD359) - My project hosted on GitHub!
+
 
