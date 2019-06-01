@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Search from '../components/search/Search.js';
 import Header from '../components/header/Header.js';
 import hikers from '../components/images/hikers.jpg';
 import defPic from '../components/images/default.jpeg';
@@ -11,7 +10,8 @@ class Description extends Component{
         shows: [],
         isLoaded: false,
         search: '',
-        human: false
+        human: false,
+        cast: [],
     }
     componentDidMount(){
         let detailed = JSON.parse(localStorage.getItem("description")) || [];
@@ -24,7 +24,7 @@ class Description extends Component{
 
     fetchData(query){
         if(query.human === false){
-            
+            //Promise.all([])
             fetch(`https://api.tvmaze.com/shows/${query.dID}?embed[]=episodes&embed[]=cast`)
             .then(data => data.json())    
             .then(
@@ -93,29 +93,20 @@ class Description extends Component{
             return <div>Loading...</div>;
         } else {
             return(
-
-
-                
                 <div style={styles.div}>
-                    <Header />
-                    
+                    <Header />                
                     <div className="container" style={styles.hContainer}>   
                         <div className="row mt-5 justify-content-center" style={styles.headerRow}>
                             <h1 className="col-6" style={styles.h1}  >Descriptions Page</h1>
                         </div>
-                   
                     </div>
-                        {human && actors.length > 0 ? actors.map(actor => {
+                    {human && actors.length > 0 ? actors.map(actor => {
                             const{ name, birthday, image,} = actor;
             
                             return(
                                 
                                     <section className="container ml-5" >
-                                        <div className="row justify-content-center" >
-                                            <div className="col">
-                                               
-                                            </div>
-                                        </div>
+                                        
                                         <div className="row">
                                             <section className="col">
                                                 <span><img  src={image}></img></span>
@@ -148,17 +139,14 @@ class Description extends Component{
                                 
                     )
             
-                  }) :null
-                  
-                }
+                        }) :null 
+                    }
               
-                {!human && shows.length > 0 ? shows.map(show => {
-                    const{id, name, summary, premiered, rating, image} = show;
-            
-                    return(
-                        <div style={styles.div}>
-                            <section className="container" >
-                                <div className="row">
+                    {!human && shows.length > 0 ? shows.map(show => {
+                        const{id, name, summary, premiered, rating, image} = show;
+                        return(
+                            <section className="container" style={styles.showC}>
+                                <div className="row m-3">
                                     <section className="col">
                                         <span><img id={id} src={image}></img></span>
                                     </section>
@@ -174,26 +162,26 @@ class Description extends Component{
                                         {summary}
                                         </p>
                                     </section>
-                                    <section className="col">
-                                        <section className="container">
-                                            <div className="row">
-                                                <h3>Related Content</h3>
-                                            </div>
-                                            <div className="row">
-                                                <span >
-                                                    
+                                </div>
+                                <div className="row mt-5">
+                                    <section className="container">
+                                        <div className="row justify-content-center">
+                                            <h3>Related Content</h3>
+                                        </div>
+                                        <div className="row ">
+                                            <span>
+                                            
                                                     <a href="#/">
                                                     <img alt="hikers" src={hikers} style={styles.img}/>
                                                     link
                                                     </a>
-                                                </span>
-                                            </div>
-                                            <div className="row"></div>
-                                        </section>
+                                            </span>
+                                        </div>
+                                        <div className="row"></div>
                                     </section>
-                                </div>
-                            </section>
-                        </div>
+                                </div>                                
+                        </section>
+                   
                     )
             
                   }) :null
@@ -214,16 +202,24 @@ export default Description;
 const styles = {
     div: {
         display: "grid",
-        backgroundSize: '100%',
-        width: "100%",
-        hieght: "100%",
+       
         fontFamily: "'Freckle Face', cursive",
         color: "#F9D780",
+        
     },
     hContainer:{
         width: "100%",
         marginTop: "5rem",
         marginBottom: "5rem"
+    },
+    showC :{
+        backgroundColor: "white",
+        opacity: '.9',
+        justifyContent: "center",
+        alignContent: "center",
+        padding: "2rem",
+        borderRadius: "15px",
+        maxWidth: "70%"
     },
     img: {
         maxWidth: "10rem",
