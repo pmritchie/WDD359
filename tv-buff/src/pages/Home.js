@@ -22,29 +22,37 @@ search = (e,v) => {
   console.log(v)
   e.preventDefault();
   //change v to array and split where spaces then at +
- 
-  //send local storage here to fetch data to check for favorites // turn heart red
-
   localStorage.setItem('search', JSON.stringify(v))
-  //this.setState({search: v});
   this.fetchData(v);
 }
 
 componentDidMount() {
+  
   //load data from localStorage here
   const storage = JSON.parse(localStorage.getItem('favorites'));
- 
-  if(storage === null){
-    console.log("null")
-    this.setState({favList: [{id:0, fav:false, human:false}]})
-    localStorage.setItem('favorites',JSON.stringify([{id:0, fav:false, human:false}]))
-
+  const search = JSON.parse(localStorage.getItem('search'));
+  
+  //checking if something has been searched, if it has load that info, if not, load from hardcode
+  if(search === null){
+      if(storage === null){
+        this.setState({favList: [{id:null, fav:false, human:false}]})
+        localStorage.setItem('favorites',JSON.stringify([{id:null, fav:false, human:false}]))
+      }else{
+        this.setState({favList: storage})
+        }
+        this.fetchData("Tom")
   }else{
-    console.log("not null")
-    this.setState({favList: storage})
+
+    if(storage === null){
+     
+      this.setState({favList: [{id:null, fav:false, human:false}]})
+      localStorage.setItem('favorites',JSON.stringify([{id:null, fav:false, human:false}]))
+    }else{
+      this.setState({favList: storage})
+    }
+    this.fetchData(search)
   }
- 
-  this.fetchData("Mimi")
+  console.log(this.state.favList)
 }
 
 fetchData(query){
@@ -88,13 +96,13 @@ fetchData(query){
         image: `${show.show.image.medium}`,
         fav: false
       }));
+      //check to see if the heart needs to be red or not
       for( let i = 0; i < sArray.length; i++ ){
         let tempA = [...this.state.favList]
         let check = sArray[i].id;
         for(let v = 0; v < tempA.length; v++){
           if(check === tempA[v].id){
             sArray[i].fav = true;
-            console.log(sArray[i].fav)
           }
         }
       }
@@ -104,7 +112,6 @@ fetchData(query){
         for(let v = 0; v < tempA.length; v++){
           if(check === tempA[v].id){
             pArray[i].fav = true;
-            console.log(sArray[i].fav)
           }
         }
       }
@@ -117,38 +124,67 @@ fetchData(query){
       isLoaded:true
     }));
 }
+
+
 //function to add favorites to local storage
-addFav = (id,person, e) => {
- 
-  console.log(e);
+addFav = (id,person) => {
+  const favList = [...this.state.favList];
+  const storage = [...JSON.parse(localStorage.getItem('favorites'))];
+  const actors = [...this.state.actors];
+  const shows = [...this.state.shows];
   //check state favList for items, if empty set localStorage and favList
-  let favList = [...this.state.favList]
-if(favList.length === 0){
+if(favList.length <= 1){
       favList.push({id:id,human:person,fav:true});
       this.setState({favList});
-      localStorage.setItem('favorites', JSON.stringify(favList));
-      //redirect or not to direct 
+      storage.push({id:id,human:person,fav:true})
 }else{
-
-  const storage = [...JSON.parse(localStorage.getItem('favorites'))];
-  favList.forEach(function(item, index){
-       if(item.id === id){
-         favList.splice(index,1);
-       }
-    })
-    storage.forEach(function(item, index){
-      if(item.id === id){
-        storage.splice(index,1);
-      }
-   })
-        storage.push({id:id, human:person,fav:true});
-        //console.log(storage);
-        favList.push({id:id,human:person});
-        this.setState({favList});
-        localStorage.setItem('favorites', JSON.stringify(storage));
-  
+    //check and see if it already exist if not add
+    const idCheck = favList.some(el => el.id === id)
+    if(idCheck === true){
+      favList.forEach(function(item, index){
+        if(item.id === id){
+        favList.splice(index,1);
+        }
+      })
+    }else{
+      favList.push({id:id,human:person,fav:true});
+    }
+    //check and see if it already exists if not add
+    const idShow = storage.some(el => el.id === id)
+    if(idShow === true){
+      storage.forEach(function(item, index){
+        if(item.id === id){
+          storage.splice(index,1);
+        } 
+      })
+    }else{
+      storage.push({id:id,human:person,fav:true})
+    }
+   
 }
-
+//these two check to if the heart is lit or not
+  actors.forEach(function(item, index){
+    if(item.id === id){
+      if(item.fav === true){
+        actors[index].fav = false;
+      }else{
+        actors[index].fav = true;
+      }
+      
+    } 
+  })
+  shows.forEach(function(item, index){
+    if(item.id === id){
+      if(item.fav === true){
+        shows[index].fav = false;
+      }else{
+        shows[index].fav = true;
+      }  
+    } 
+  })
+  this.setState({favList,shows,actors});
+  localStorage.setItem('favorites', JSON.stringify(storage));
+  
 } 
 detailed = (id,person) => {
   let dID = {dID:id, human:person};
@@ -157,14 +193,7 @@ detailed = (id,person) => {
 }
 
 
-
-
-
-
-
 render() {
-  console.log(this.state.favList);
-  console.log(JSON.parse(localStorage.getItem('favorites')));
   const { err, isLoaded, actors, shows, favList } = this.state;
   if (err) {
     return <div>Error: {err.message}</div>;
@@ -280,50 +309,4 @@ const styles = {
   },
   
 };
- // <img src={show.show.image.medium} />
-            // <a></a>
-            // {shows.map(item => {
-            //   console.log(item);
-            //   return(
-            //     <li key={item.id}>
-            //       <p>{item.name}</p>
-            //     </li>
-            //   )})}
-
-
-
-///////////////////////////////////////////////////////////
-// parsePeople(peopleData) { 
-//   console.log("parsingPeople:",peopleData)
-//     return peopleData.map(actor => ({
-//       id: `${actor.person.id}`,
-//       name: `${actor.person.name}`,
-//       birthday: `${actor.person.birthday}`,
-//       image: `${actor.person.image.medium}`
-//     }));
-// }
-
-// parseShows(showData) {
-//   console.log('parsingShows:',showData);
-//   return showData.map(show => ({
-//     id: `${show.show.id}`,
-//     name: `${show.show.name}`,
-//     summary: `${show.show.summary}`,
-//     image: `${show.show.image.medium}`,
-//   }))
-// } 
-//////////////////////////////////////////////////
-  // ,
-    //   (err) => {
-    //     this.setState({
-    //       isLoaded: false,
-    //       err
-    //     });
-    /////////////////////////
-         //  }else{
-      //   console.log(item.id, index)
-      //   favList.push({id:id,human:person})
-      //   this.setState({favList})
-      //   localStorage.setItem('favorites', JSON.stringify(favList))
-      //  }
-    
+ 

@@ -92,6 +92,38 @@ class Favorites extends Component{
         })
         this.setState({isLoaded:true})       
       }
+
+      addFav = (id,person) =>{
+        const favorites = [...JSON.parse(localStorage.getItem('favorites'))];
+        const actors = [...this.state.actors]
+        const shows = [...this.state.shows]
+        favorites.forEach(function(item, index){
+          if(item.id === id){
+            console.log(item.id)
+            favorites.splice(index,1)
+            }
+        
+        })
+        actors.forEach(function(item, index){
+          if(item.id === id){
+            console.log(item.id)
+            actors.splice(index,1)
+            }
+        })
+        
+        shows.forEach(function(item, index){
+          if(item.id === id){
+            console.log(item.id)
+            shows.splice(index,1)
+            }
+        })
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        this.setState({actors: actors});
+        this.setState({shows: shows});
+        //resest actors here to refresh without refreshing page
+        // window.location.reload();
+      }
+
       detailed = (id,person) => {
         let dID = {dID:id, human:person}
         localStorage.setItem('description', JSON.stringify(dID))
@@ -118,7 +150,7 @@ class Favorites extends Component{
               <section className="container">
                 <div className="row">
                 
-                  {isLoaded && actors.length > 0 ? actors.map(actor => { const {id, name, birthday, image} = actor; 
+                  {isLoaded && actors.length > 0 ? actors.map(actor => { const {id, name, birthday, image, fav} = actor; 
                     const person = true;
                     //console.log(id) 
                           return <Card 
@@ -127,10 +159,11 @@ class Favorites extends Component{
                                   birthday={birthday} 
                                   image={image} 
                                   title={name} 
+                                  fav={fav}
                                   addFav={()=>this.addFav(id,person)} 
                                   detailed={()=>this.detailed(id,person)}
                             />
-                        }): null
+                        }): <h2>You haven't favorited anyone yet!</h2>
                   }
                 </div>
               </section>
@@ -138,7 +171,7 @@ class Favorites extends Component{
               <section className="container">
                 <div className="row">
                 
-                {isLoaded && shows.length > 0 ? shows.map(show => { const {id, name, rating, image} = show;  
+                {isLoaded && shows.length > 0 ? shows.map(show => { const {id, name, rating, image, fav} = show;  
                   const person = false;
                         return <Card 
                                 style={styles.card} 
@@ -146,10 +179,11 @@ class Favorites extends Component{
                                 rating={"Rating: "+rating} 
                                 image={image} 
                                 title={name}
+                                fav={fav}
                                 addFav={()=>this.addFav(id,person)}
                                 detailed={()=>this.detailed(id,person)}
                                 />
-                        }): null
+                        }): <h2>You haven't favorited any shows yet!</h2>
                 }
                   </div>
               </section>
