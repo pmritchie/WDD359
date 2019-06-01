@@ -35,7 +35,7 @@ const styles = {
     color: "red"
   },
   icon_unchecked: {
-    color: "yellow"
+    color: "grey"
   }
 };
 
