@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Header from '../components/header/Header.js';
-import hikers from '../components/images/hikers.jpg';
 import defPic from '../components/images/default.jpeg';
 import Card from '../components/card/Card';
 
@@ -13,6 +12,7 @@ class Description extends Component{
         search: '',
         human: false,
         cast: [],
+        credits: []
     }
     componentDidMount(){
         let detailed = JSON.parse(localStorage.getItem("description")) || [];
@@ -23,59 +23,9 @@ class Description extends Component{
     }
 
     fetchData(query){
+        //check to see if human or false for layout
         if(query.human === false){
             console.log("showtime");
-            // Promise.all([
-            //     fetch(`https://api.tvmaze.com/shows/${query.dID}/cast`,{method: 'get'}),
-            //     fetch(`https://api.tvmaze.com/shows/${query.dID}?embed[]=episodes&embed[]=cast`)
-            // ])
-            // .then(([prom1, prom2]) => {
-            //     //convert into json
-            //     let output = Promise.all([prom1.json(),prom2.json()]);
-            //     return output;
-            // })
-            // .then(
-            //     (stuff) => {
-            //     let [data1,data2] = stuff;
-            //     console.log(data1)
-            //     console.log(data2)
-            //     data1.forEach(function(data){
-            //         if(data.person.image == null){
-            //           data.person.image = {medium: `${defPic}`, large: "./images/hikers.jpg"};
-            //         }
-            //      })
-            //        if(data.image == null){
-            //          data.image = {medium: `${defPic}`, large: "./images/hikers.jpg"};  
-            //        }
-            //        if(data.rating.average == null){
-            //         data.show.rating = {average: "N/A"};
-            //        }
-               
-            //     let pArray = data1.map(actor => ({
-            //         id: `${actor.person.id}`,
-            //         name: `${actor.person.name}`,
-            //        image: `${actor.person.image.medium}`,
-            //       }));
-            //     let sArray = data2.map(show => ({
-            //         id: `${show.id}`,
-            //         name: `${show.name}`,
-            //         image: `${show.image.medium}`,
-            //         rating: `${show.rating.average}`,
-            //         summary: `${show.summary}`,
-            //         premiered: `${show.premiered}`,
-            //         fav: false
-            //       }))  
-            //       return [pArray,sArray]
-            //     })
-            //     .then(([cast,shows]) => this.setState({
-            //         cast,
-            //         shows,
-            //         isLoaded:true 
-            //     }));
-
-
-
-
             fetch(`https://api.tvmaze.com/shows/${query.dID}?embed[]=episodes&embed[]=cast`)
             .then(data => data.json())    
             .then(
@@ -90,6 +40,7 @@ class Description extends Component{
                     if(data.rating.average == null){
                         data.rating = {average: "N/A"}
                     }
+                    //had to forLoop to get into cast array
                     for(let i = 0; i < data._embedded.cast.length; i++){
                         console.log(data._embedded.cast[i].person.image)
                         if(data._embedded.cast[i].person.image == null){
@@ -102,11 +53,7 @@ class Description extends Component{
                         image: `${actor.person.image.medium}`
                     })) 
                     cArray.push(c2Array)
-                    console.log(cArray)
-                  
-                 })
-                    
-                    
+                 })                
                 let sArray = data.map(show => ({
                     id: `${show.id}`,
                     name: `${show.name}`,
@@ -116,8 +63,6 @@ class Description extends Component{
                     premiered: `${show.premiered}`,
                     fav: false
                   })) 
-                  console.log(cArray)
-                  console.log(sArray)
                  return [sArray, cArray]
             }).then(([shows,cast]) => this.setState({
                 shows,
@@ -135,10 +80,34 @@ class Description extends Component{
                 //push object to array
                 let data1 = [];
                 data1.push(stuff) 
-                
+                const push = []
                 data1.forEach(function(data){
                     if(data.image == null){
                       data.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
+                    }
+                    // for loop to get into credits
+                    for(let i = 0; i < data._embedded.castcredits.length; i++){
+                        const showData = data._embedded.castcredits[i]._links.show.href.split('/')
+                        const showID = showData.pop()
+                        fetch(`https://api.tvmaze.com/shows/${showID}`,{method: 'get'})
+                        .then((data) =>{
+                            let output = data.json()
+                            return output
+                        }).then((stuff)=>{
+                            if(stuff.image === null){
+                                stuff.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
+                            }
+                            let temp = []
+                            temp.push(stuff);
+                            let sArray = temp.map(show => ({
+                                id: `${show.id}`,
+                                name: `${show.name}`,
+                                image: `${show.image.medium}`
+                            }))                  
+                            return sArray
+                        }).then((cast) =>{
+                            push.push(cast)
+                        })
                     }
                  })   
                 let pArray = data1.map(actor => ({
@@ -146,11 +115,14 @@ class Description extends Component{
                     name: `${actor.name}`,
                     birthday: `${actor.birthday}`,
                     image: `${actor.image.medium}`,
+                    country: `${actor.country.name}`,
                     fav: false
                   })) 
-                  return pArray;
-                }).then((actors) => this.setState({
+                  
+                  return [pArray,push];
+                }).then(([actors,credits]) => this.setState({
                     actors,
+                    credits,
                     isLoaded:true,
                     human: true
                   }))
@@ -159,11 +131,13 @@ class Description extends Component{
       detailed = (id,person) => {
         let dID = {dID:id, human:person};
         localStorage.setItem('description', JSON.stringify(dID));
+        //reload page for new description
         window.location.reload()
       }
     render(){
         
-        const { err, isLoaded, actors, shows, human, cast} = this.state;
+        const { err, isLoaded, actors, shows, human, cast, credits} = this.state;
+        console.log(credits)
         console.log(cast)
         if (err) {
             return <div>Error: {err.message}</div>;
@@ -179,43 +153,51 @@ class Description extends Component{
                         </div>
                     </div>
                     {human && actors.length > 0 ? actors.map(actor => {
-                            const{ name, birthday, image,} = actor;
-            
-                            return(
-                                
-                                    <section className="container ml-5" >
-                                        
-                                        <div className="row">
-                                            <section className="col">
-                                                <span><img  src={image}></img></span>
-                                            </section>
-                                            <section className="col">
-                                                <h2 >{name}</h2>
-                                                <p>Birthday: {birthday}</p>
-                                            </section>
-                                        </div>
-                                        <div className="row">
-                                            <section className="col">
-                                                <p>{birthday}</p>
-                                            </section>
-                                            <section className="col">
-                                                <section className="container">
-                                                    <div className="row">
-                                                        <h3>Related Content</h3>
-                                                    </div>
-                                                    <div className="row">
-                                                        <span>
-                                                            <a href="#/"><img alt="hikers" src={hikers} style={styles.img}/>link</a>
-                                                         </span>
-                                                    </div>
-                                                    <div className="row">
-                                                    </div>
-                                                </section>
-                                            </section>
-                                        </div>
+                            const{ name, birthday, image, country, id} = actor;
+                        return(
+                            <section className="container" style={styles.showC}>
+                                <div className="row m-3">
+                                    <section className="col">
+                                        <span><img id={id} src={image} alt={name+" picture"}></img></span>
                                     </section>
-                                
-                    )
+                                    <section className="col">
+                                        <h2>{name}</h2>
+                                        <p>Birthday: {birthday}</p>
+                                        <p>Country: {country}</p>
+                                    </section>
+                                </div>
+                                <div className="row mt-5">
+                                    <section className="container">
+                                        <div className="row justify-content-center">
+                                            <h3>Cast Credits</h3>
+                                        </div>
+                                        <div className="row ">
+                                         {
+                                            //will not loop.. array inception going on here
+                                            credits.map(show => {
+                                                const person = false;
+                                                const{id, name, image} = show;
+                                                return(
+                                                    <Card 
+                                                    style={styles.card}
+                                                    alt={name+ "picture"}
+                                                    key={id}
+                                                    image={image}
+                                                    title={name}
+                                                    id={id}
+                                                    addFav={()=>this.addFav(id,person)} 
+                                                    detailed={()=>this.detailed(id,person)}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                          
+                                        </div>
+                                        <div className="row"></div>
+                                    </section>
+                                </div>                                
+                            </section>      
+                        )
             
                         }) :null 
                     }
@@ -226,7 +208,7 @@ class Description extends Component{
                             <section className="container" style={styles.showC}>
                                 <div className="row m-3">
                                     <section className="col">
-                                        <span><img id={id} src={image}></img></span>
+                                        <span><img id={id} src={image} alt={name+" picture"}></img></span>
                                     </section>
                                     <section className="col">
                                         <h2>{name}</h2>
@@ -244,10 +226,10 @@ class Description extends Component{
                                 <div className="row mt-5">
                                     <section className="container">
                                         <div className="row justify-content-center">
-                                            <h3>Related Content</h3>
+                                            <h3>Cast</h3>
                                         </div>
                                         <div className="row ">
-                                        { 
+                                        { //display cards for actors on show
                                             cast[0].map(actor => {
                                                 const person = true;
                                                 const{id, name, image} = actor;
@@ -271,22 +253,19 @@ class Description extends Component{
                                         <div className="row"></div>
                                     </section>
                                 </div>                                
-                        </section>
-                   
-                    )
+                            </section>
+                            )
             
-                  }) :null
+                        }) :null
                   
-                }
+                    }   
                 </div>
                
-                )
+            )
                  
-            }        
-            }
-            
-            
+         }        
     }
+}
 
 export default Description;
 

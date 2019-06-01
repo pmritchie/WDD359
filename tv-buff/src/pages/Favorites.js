@@ -20,7 +20,7 @@ class Favorites extends Component{
     fetchData = (query) => {
         let hArray = []
         let sArray = []
-        
+        //split between actor and show
         query.forEach(function(data){
             if(data.human === true){
                   hArray.push(data) 
@@ -38,12 +38,13 @@ class Favorites extends Component{
              //push object to array
                 let data1 = [];
                 data1.push(stuff) 
-                
+                //check for null, add data
                 data1.forEach((data) => {
                     if(data.image == null){
                      data.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
                     }
                 })   
+                //make actor objects
                 let bArray = data1.map(actor => ({
                     id: `${actor.id}`,
                     name: `${actor.name}`,
@@ -68,32 +69,30 @@ class Favorites extends Component{
              //push object to array
                 let data1 = [];
                 data1.push(stuff) 
-            
+            //check for null, add data
                 data1.forEach((data)=>{
                     if(data.image == null || data.rating.average == null){
                       data.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
                       data.rating = {average: "N/A"}
                     }
                  })  
+                 //make show object
                 let sArray = data1.map(show => ({
                     id: `${show.id}`,
                     name: `${show.name}`,
                     rating: `${show.birthday}`,
                     image: `${show.image.medium}`,
                     fav: true
-              })) 
-              
+              }))   
               return sArray;
             }).then((stuff) => {
-              this.setState(state => ({shows: [...state.shows, stuff[0]]}))
-             
-                
+              this.setState(state => ({shows: [...state.shows, stuff[0]]})) 
             })
         })
         this.setState({isLoaded:true})       
       }
 
-      addFav = (id,person) =>{
+      addFav = (id) =>{
         const favorites = [...JSON.parse(localStorage.getItem('favorites'))];
         const actors = [...this.state.actors]
         const shows = [...this.state.shows]
@@ -123,7 +122,7 @@ class Favorites extends Component{
         //resest actors here to refresh without refreshing page
         // window.location.reload();
       }
-
+      //load to description page, set local storage to pass id
       detailed = (id,person) => {
         let dID = {dID:id, human:person}
         localStorage.setItem('description', JSON.stringify(dID))
@@ -150,9 +149,10 @@ class Favorites extends Component{
               <section className="container">
                 <div className="row">
                 
-                  {isLoaded && actors.length > 0 ? actors.map(actor => { const {id, name, birthday, image, fav} = actor; 
+                  {isLoaded && actors.length > 0 ? actors.map(actor => { const {id, name, birthday, image, fav} = actor;
+                    //set person to true 
                     const person = true;
-                    //console.log(id) 
+                     //load cards and insert dynamic data
                           return <Card 
                                   style={styles.card} 
                                   key={id} alt={name+" picture"} 
