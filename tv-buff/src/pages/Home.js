@@ -71,16 +71,22 @@ fetchData(query){
       let [data1,data2] = stuff;
       //loop through data to check for null value's replace with value
       data1.forEach(function(data){
-         if(data.person.image == null){
+         if(data.person.image === null){
            data.person.image = {medium: `${defPic}`, large: "./images/hikers.jpg"};
          }
       })
       data2.forEach(function(data){
-        if(data.show.image == null || data.show.rating.average == null){
+        if(data.show.image === null){
           data.show.image = {medium: `${defPic}`, large: "./images/hikers.jpg"};
           data.show.rating = {average: "N/A"};
         }
      })
+     data2.forEach(function(data){
+      if(data.show.rating.average === null){
+        data.show.rating = {average: "N/A"};
+      }
+   })
+
      // create array of objects
       let pArray = data1.map(actor => ({
         id: `${actor.person.id}`,
@@ -195,14 +201,17 @@ detailed = (id,person) => {
 
 render() {
   const { err, isLoaded, actors, shows, favList } = this.state;
+  console.log(shows)
   if (err) {
     return <div>Error: {err.message}</div>;
   } else if (!isLoaded) {
     return <div>Loading...</div>;
   } else { 
     return (
+      
       <div style={styles.div}>
-        <Header />
+      <Header />
+        <div className="body">
         <div className="container">
           <div className="row mt-5">
             <div className="col" style={styles.headerCol}>
@@ -219,7 +228,6 @@ render() {
           
             {isLoaded && actors.length > 0 ? actors.map(actor => { const {id, name, birthday, image, fav} = actor; 
               const person = true;
-              //console.log() 
                     return <Card 
                             style={styles.card} 
                             key={id} alt={name+" picture"} 
@@ -262,6 +270,7 @@ render() {
           }
             </div>
         </section>
+        </div>
       </div>
     );
   }

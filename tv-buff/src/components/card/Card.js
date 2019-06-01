@@ -9,14 +9,14 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import { red, yellow } from '@material-ui/core/colors';
+
 
 const styles = {
   card: {
     minWidth: 240,
     maxWidth: 240,
     minHeight: 300,
-    maxHeight: 350,
+    maxHeight: 450,
     margin: '1rem',
     fontFamily: "'Freckle Face', cursive",
     backgroundColor: "#93B1AF",
@@ -44,6 +44,7 @@ const styles = {
 
 
 
+//simple material ui card
 
 
 
