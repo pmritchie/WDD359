@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from '../components/header/Header.js';
 import hikers from '../components/images/hikers.jpg';
 import defPic from '../components/images/default.jpeg';
+import Card from '../components/card/Card';
 
 
 class Description extends Component{
@@ -18,25 +19,94 @@ class Description extends Component{
         console.log(detailed)
         if(detailed.length === 0){
             this.setState({isLoaded: true})
-        }else{this.fetchData(detailed) }
-        
+        }else{this.fetchData(detailed)}
     }
 
     fetchData(query){
         if(query.human === false){
-            //Promise.all([])
+            console.log("showtime");
+            // Promise.all([
+            //     fetch(`https://api.tvmaze.com/shows/${query.dID}/cast`,{method: 'get'}),
+            //     fetch(`https://api.tvmaze.com/shows/${query.dID}?embed[]=episodes&embed[]=cast`)
+            // ])
+            // .then(([prom1, prom2]) => {
+            //     //convert into json
+            //     let output = Promise.all([prom1.json(),prom2.json()]);
+            //     return output;
+            // })
+            // .then(
+            //     (stuff) => {
+            //     let [data1,data2] = stuff;
+            //     console.log(data1)
+            //     console.log(data2)
+            //     data1.forEach(function(data){
+            //         if(data.person.image == null){
+            //           data.person.image = {medium: `${defPic}`, large: "./images/hikers.jpg"};
+            //         }
+            //      })
+            //        if(data.image == null){
+            //          data.image = {medium: `${defPic}`, large: "./images/hikers.jpg"};  
+            //        }
+            //        if(data.rating.average == null){
+            //         data.show.rating = {average: "N/A"};
+            //        }
+               
+            //     let pArray = data1.map(actor => ({
+            //         id: `${actor.person.id}`,
+            //         name: `${actor.person.name}`,
+            //        image: `${actor.person.image.medium}`,
+            //       }));
+            //     let sArray = data2.map(show => ({
+            //         id: `${show.id}`,
+            //         name: `${show.name}`,
+            //         image: `${show.image.medium}`,
+            //         rating: `${show.rating.average}`,
+            //         summary: `${show.summary}`,
+            //         premiered: `${show.premiered}`,
+            //         fav: false
+            //       }))  
+            //       return [pArray,sArray]
+            //     })
+            //     .then(([cast,shows]) => this.setState({
+            //         cast,
+            //         shows,
+            //         isLoaded:true 
+            //     }));
+
+
+
+
             fetch(`https://api.tvmaze.com/shows/${query.dID}?embed[]=episodes&embed[]=cast`)
             .then(data => data.json())    
             .then(
                 (stuff) => {
                 let data = [];
+                let cArray = [];
                 data.push(stuff)    
                 data.forEach(function(data){
-                    if(data.image == null || data.rating.average == null){
+                    if(data.image == null){
                       data.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
-                      data.rating = {average: "N/A"}
                     }
+                    if(data.rating.average == null){
+                        data.rating = {average: "N/A"}
+                    }
+                    for(let i = 0; i < data._embedded.cast.length; i++){
+                        console.log(data._embedded.cast[i].person.image)
+                        if(data._embedded.cast[i].person.image == null){
+                            data._embedded.cast[i].person.image = {medium: `${defPic}`, large: "./images/hikers.jpg"};
+                        }
+                    }
+                    let c2Array = data._embedded.cast.map(actor => ({
+                        id: `${actor.person.id}`,
+                        name: `${actor.person.name}`,
+                        image: `${actor.person.image.medium}`
+                    })) 
+                    cArray.push(c2Array)
+                    console.log(cArray)
+                  
                  })
+                    
+                    
                 let sArray = data.map(show => ({
                     id: `${show.id}`,
                     name: `${show.name}`,
@@ -45,13 +115,16 @@ class Description extends Component{
                     summary: `${show.summary}`,
                     premiered: `${show.premiered}`,
                     fav: false
-                  }))  
-                 return sArray
-            }).then((shows)=> this.setState({
+                  })) 
+                  console.log(cArray)
+                  console.log(sArray)
+                 return [sArray, cArray]
+            }).then(([shows,cast]) => this.setState({
                 shows,
+                cast,
                 isLoaded:true,
                 human: false
-            }))
+            }));
         }else{
             //Change api over too - http://api.tvmaze.com/people/1/castcredits?embed=show
             fetch(`https://api.tvmaze.com/people/${query.dID}?embed=castcredits`)
@@ -83,10 +156,15 @@ class Description extends Component{
                   }))
         }        
       }
+      detailed = (id,person) => {
+        let dID = {dID:id, human:person};
+        localStorage.setItem('description', JSON.stringify(dID));
+        window.location.reload()
+      }
     render(){
         
-        const { err, isLoaded, actors, shows, human} = this.state;
-        console.log(actors.length)
+        const { err, isLoaded, actors, shows, human, cast} = this.state;
+        console.log(cast)
         if (err) {
             return <div>Error: {err.message}</div>;
         } else if (!isLoaded) {
@@ -169,13 +247,26 @@ class Description extends Component{
                                             <h3>Related Content</h3>
                                         </div>
                                         <div className="row ">
-                                            <span>
-                                            
-                                                    <a href="#/">
-                                                    <img alt="hikers" src={hikers} style={styles.img}/>
-                                                    link
-                                                    </a>
-                                            </span>
+                                        { 
+                                            cast[0].map(actor => {
+                                                const person = true;
+                                                const{id, name, image} = actor;
+                                                console.log(actor)
+                                                return(
+                                                    <Card 
+                                                    style={styles.card}
+                                                    alt={name+ "picture"}
+                                                    key={id}
+                                                    image={image}
+                                                    title={name}
+                                                    id={id}
+                                                    addFav={(e)=>this.addFav(id,person,)} 
+                                                    detailed={()=>this.detailed(id,person)}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                          
                                         </div>
                                         <div className="row"></div>
                                     </section>
@@ -234,7 +325,12 @@ const styles = {
     },
     h1:{
         fontSize: "64px"
-    }
+    },
+    card: {
+        fontFamily: "'Freckle Face', cursive",
+        color: "#F9D780",
+          
+      },
 
     
 }

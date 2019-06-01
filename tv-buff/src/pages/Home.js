@@ -201,8 +201,10 @@ render() {
     return <div>Loading...</div>;
   } else { 
     return (
+      
       <div style={styles.div}>
-        <Header />
+      <Header />
+        <div className="body">
         <div className="container">
           <div className="row mt-5">
             <div className="col" style={styles.headerCol}>
@@ -262,6 +264,7 @@ render() {
           }
             </div>
         </section>
+        </div>
       </div>
     );
   }
