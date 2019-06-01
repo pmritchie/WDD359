@@ -30,7 +30,7 @@ class Favorites extends Component{
         })
         console.log(hArray)
         hArray.forEach((data) => { 
-            fetch(`http://api.tvmaze.com/people/${data.id}?embed=castcredits`)
+            fetch(`https://api.tvmaze.com/people/${data.id}?embed=castcredits`)
             .then((data) => {
                 let output = data.json()
                 return output
@@ -61,7 +61,7 @@ class Favorites extends Component{
         })
 
         sArray.forEach((data)=>{
-            fetch(` http://api.tvmaze.com/shows/${data.id}`)
+            fetch(` https://api.tvmaze.com/shows/${data.id}`)
             .then((data) => {
                 let output = data.json()
                 return output
