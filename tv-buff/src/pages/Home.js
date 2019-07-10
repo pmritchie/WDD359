@@ -62,7 +62,7 @@ fetchData(query){
     fetch(`https://api.tvmaze.com/search/shows?q=:${query}`,{method: 'get'})
   ])
   .then(([prom1, prom2]) => {
-    //convert into json 
+    //convert into json
     let output = Promise.all([prom1.json(),prom2.json()]);
     return output;
   })
