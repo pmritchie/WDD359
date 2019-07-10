@@ -82,14 +82,9 @@ class Description extends Component{
                 data1.push(stuff) 
                 const push = []
                 data1.forEach(function(data){
-                    if(data.image === null){
+                    if(data.image == null){
                       data.image = {medium: `${defPic}`, large: "./images/hikers.jpg"}
                     }
-                data1.forEach(function(data){
-                    if(data.country === null){
-                        data.country = {name: "United States", code: "US", timezone:"America/Los_Angeles"  };
-                    }
-                })
                     // for loop to get into credits
                     for(let i = 0; i < data._embedded.castcredits.length; i++){
                         const showData = data._embedded.castcredits[i]._links.show.href.split('/')
