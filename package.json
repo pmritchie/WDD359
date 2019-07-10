@@ -1,0 +1,19 @@
+{
+  "name": "wdd359",
+  "version": "1.0.0",
+  "description": "This repo is for a school project using client-side code and incorperating third party APIs. React.js is the framework I will be using to build this web-app. Updates will be made here when more details and direction is decided for the project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pmritchie/WDD359.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pmritchie/WDD359/issues"
+  },
+  "homepage": "https://github.com/pmritchie/WDD359#readme"
+}
