@@ -11,15 +11,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pmritchie/WDD359.git"
+    "url": "git+https://github.com/pmritchie/TV-BUFF-WEBAPP.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/pmritchie/WDD359/issues"
+    "url": "https://github.com/pmritchie/TV-BUFF-WEBAPP/issues"
   },
-  "homepage": "https://github.com/pmritchie/WDD359#readme",
+  "homepage": "https://github.com/pmritchie/TV-BUFF-WEBAPP#readme",
   "devDependencies": {
     "concurrently": "^4.1.1"
   }
 }
+
