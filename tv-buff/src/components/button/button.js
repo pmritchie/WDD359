@@ -1,12 +1,10 @@
-import React from 'react'
-import './MyBtn.css'
+import React from 'react';
+import './MyBtn.css';
 
-//Dummy Component
-const MyBtn = props => {  
-  return (
-    <button style={props.style} type={props.submit}>
+// Dummy Component
+const MyBtn = props => (
+  <button style={props.style} type={props.submit}>
     <i className="material-icons md-36">search</i>
-    </button>
-  )
-}
-export default MyBtn
+  </button>
+);
+export default MyBtn;

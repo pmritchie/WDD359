@@ -32,9 +32,8 @@
 // }
 
 
-
 // function NavTabs() {
-  
+
 //   const [value, setValue] = React.useState(0);
 
 //   function handleChange(event, newValue) {
@@ -49,13 +48,12 @@
 //           <LinkTab label="Favorites" href="/Favorites" />
 //         </Tabs>
 //       </AppBar>
-     
+
 //     </div>
 //   );
 // }
 
 // export default NavTabs;
-
 
 
 // const styles = {
@@ -65,61 +63,36 @@
 // }
 
 
-
-import React, {Component} from 'react';
-import { NavLink as RRNavLink} from 'react-router-dom'
+import React, { Component } from 'react';
+import { NavLink as RRNavLink } from 'react-router-dom';
 import { Nav, NavItem, NavLink } from 'reactstrap';
-import './Nav.css'
+import './Nav.css';
 
 
-export default  class Navigation extends Component{
-  
+export default class Navigation extends Component {
  state={
    active: false,
  }
 
-  render() {
+ render() {
+   return (
+     <div>
+       <Nav className="navi" tabs>
+         <NavItem className="item">
+           <NavLink activeClassName="active" className="link" tag={RRNavLink} to="/Home">Home</NavLink>
+         </NavItem>
+         <NavItem className="item">
+           <NavLink activeClassName="active" className="link" tag={RRNavLink} to="/Favorites">Favorites</NavLink>
+         </NavItem>
+         <NavItem className="item">
+           <NavLink activeClassName="active" className="link" tag={RRNavLink} to="/Description">Description</NavLink>
+         </NavItem>
+       </Nav>
+     </div>
 
-    return (
-        <div>
-          <Nav className="navi"  tabs>
-            <NavItem className="item">
-              <NavLink activeClassName="active" className="link" tag={RRNavLink} to="/Home">Home</NavLink>
-            </NavItem>
-            <NavItem className="item">
-              <NavLink activeClassName="active" className="link" tag={RRNavLink} to="/Favorites">Favorites</NavLink>
-            </NavItem>
-            <NavItem className="item">
-              <NavLink activeClassName="active" className="link" tag={RRNavLink} to="/Description">Description</NavLink>
-            </NavItem>
-          </Nav>
-        </div>
-      
-    );
-  }
+   );
+ }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //   // const Navigation = props => {

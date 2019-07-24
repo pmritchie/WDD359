@@ -19,42 +19,37 @@ const styles = {
     maxHeight: 450,
     margin: '1rem',
     fontFamily: "'Freckle Face', cursive",
-    backgroundColor: "#93B1AF",
-    borderRadius: "5px",
+    backgroundColor: '#93B1AF',
+    borderRadius: '5px',
 
   },
   media: {
-    padding: ".5rem",
+    padding: '.5rem',
     objectFit: 'cover',
     minHeight: 200,
   },
   button: {
-    justifyContent: "center",
+    justifyContent: 'center',
   },
-  icon_checked:{
-    color: "red"
+  icon_checked: {
+    color: 'red',
   },
   icon_unchecked: {
-    color: "grey"
-  }
+    color: 'grey',
+  },
 };
 
 
-
-
-
-
-//simple material ui card
-
+// simple material ui card
 
 
 function ImgMediaCard(props) {
-  const { classes,  } = props;
-  
+  const { classes } = props;
+
   return (
-    <Card className={classes.card} >
+    <Card className={classes.card}>
       <CardActionArea onClick={props.detailed}>
-        <CardMedia 
+        <CardMedia
           component="img"
           alt={props.alt}
           className={classes.media}
@@ -73,9 +68,9 @@ function ImgMediaCard(props) {
         </CardContent>
       </CardActionArea>
       <CardActions style={styles.button}>
-      <IconButton aria-label="Add to favorites" onClick={props.addFav} style={styles.button} className="btn">
-        <FavoriteIcon className="notActive" id={props.id} style={props.fav ? styles.icon_checked : styles.icon_unchecked}/>
-      </IconButton>
+        <IconButton aria-label="Add to favorites" onClick={props.addFav} style={styles.button} className="btn">
+          <FavoriteIcon className="notActive" id={props.id} style={props.fav ? styles.icon_checked : styles.icon_unchecked} />
+        </IconButton>
       </CardActions>
     </Card>
   );
@@ -86,4 +81,3 @@ ImgMediaCard.propTypes = {
 };
 
 export default withStyles(styles)(ImgMediaCard);
-
