@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/WDD359/static/css/main.d47fd34a.chunk.css",
-    "main.js": "/WDD359/static/js/main.6e11d212.chunk.js",
-    "main.js.map": "/WDD359/static/js/main.6e11d212.chunk.js.map",
-    "runtime~main.js": "/WDD359/static/js/runtime~main.a36872f9.js",
-    "runtime~main.js.map": "/WDD359/static/js/runtime~main.a36872f9.js.map",
-    "static/css/2.266e55a5.chunk.css": "/WDD359/static/css/2.266e55a5.chunk.css",
-    "static/js/2.e7deae0d.chunk.js": "/WDD359/static/js/2.e7deae0d.chunk.js",
-    "static/js/2.e7deae0d.chunk.js.map": "/WDD359/static/js/2.e7deae0d.chunk.js.map",
-    "index.html": "/WDD359/index.html",
-    "precache-manifest.e9147b6a66f0c13808f15f6185177c30.js": "/WDD359/precache-manifest.e9147b6a66f0c13808f15f6185177c30.js",
-    "service-worker.js": "/WDD359/service-worker.js",
-    "static/css/2.266e55a5.chunk.css.map": "/WDD359/static/css/2.266e55a5.chunk.css.map",
-    "static/css/main.d47fd34a.chunk.css.map": "/WDD359/static/css/main.d47fd34a.chunk.css.map",
-    "static/media/index.css": "/WDD359/static/media/tvset.110c2fd8.jpg"
+    "main.css": "/TV-BUFF-WEBAPP/static/css/main.585e27fc.chunk.css",
+    "main.js": "/TV-BUFF-WEBAPP/static/js/main.c0f8f72a.chunk.js",
+    "main.js.map": "/TV-BUFF-WEBAPP/static/js/main.c0f8f72a.chunk.js.map",
+    "runtime~main.js": "/TV-BUFF-WEBAPP/static/js/runtime~main.7d137b8f.js",
+    "runtime~main.js.map": "/TV-BUFF-WEBAPP/static/js/runtime~main.7d137b8f.js.map",
+    "static/css/2.266e55a5.chunk.css": "/TV-BUFF-WEBAPP/static/css/2.266e55a5.chunk.css",
+    "static/js/2.7689bed7.chunk.js": "/TV-BUFF-WEBAPP/static/js/2.7689bed7.chunk.js",
+    "static/js/2.7689bed7.chunk.js.map": "/TV-BUFF-WEBAPP/static/js/2.7689bed7.chunk.js.map",
+    "index.html": "/TV-BUFF-WEBAPP/index.html",
+    "precache-manifest.e775f7aa7ea875e4890e87fe9bfdd0c7.js": "/TV-BUFF-WEBAPP/precache-manifest.e775f7aa7ea875e4890e87fe9bfdd0c7.js",
+    "service-worker.js": "/TV-BUFF-WEBAPP/service-worker.js",
+    "static/css/2.266e55a5.chunk.css.map": "/TV-BUFF-WEBAPP/static/css/2.266e55a5.chunk.css.map",
+    "static/css/main.585e27fc.chunk.css.map": "/TV-BUFF-WEBAPP/static/css/main.585e27fc.chunk.css.map",
+    "static/media/index.css": "/TV-BUFF-WEBAPP/static/media/tvset.110c2fd8.jpg"
   }
 }
