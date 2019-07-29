@@ -23,7 +23,7 @@ Requirements for this project are as follows.
 
 
 ##Link
-* [GH-Page](https://pmritchie.github.io/WDD359) - My project hosted on GitHub!
+* [GH-Page](https://pmritchie.github.io/TV-BUFF-WEBAPP/) - My project hosted on GitHub!
 
 ##Video
 * [YouTube](https://youtu.be/67wwIeyTSnU) - Brief project review!
